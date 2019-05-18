@@ -12,7 +12,6 @@ def main():
     if (sys.argv[1] == 'list'):
         for spell in spells:
             print(spell)
-        return
     elif(sys.argv[1] == 'json'):
         p = Pool()
         result = p.map(parseSpell, spells)
@@ -27,7 +26,7 @@ def main():
 
 
 def getSpellList():
-    data = requests.get('https://www.dnd-spells.com/spells', headers={'connection': 'close'})
+    data = requests.get('https://www.dnd-spells.com/spells')
     soup = BeautifulSoup(data.text, 'html.parser')
 
     spells = []

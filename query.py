@@ -6,7 +6,7 @@ client = MongoClient('localhost',27017)
 db = client['dnd_db']
 spells = db['spells']
 
-# find all with substring from argv
+# find all spells of a class
 found = list(spells.find({'Class': {'$regex': sys.argv[1]}}))
 
 # find one

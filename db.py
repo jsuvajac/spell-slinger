@@ -11,7 +11,7 @@ def main():
         with open('spells.json') as f:
             data = json.load(f)
 
-        spells.insert(data)
+        spells.insert_many(data)
         client.close()
 
     elif (sys.argv[1] == 'drop'):
@@ -20,5 +20,6 @@ def main():
     else:
         print('invalid input, allowed options:\ndrop\nload');
         sys.exit(1)
+
 if __name__ == "__main__":
     main()
