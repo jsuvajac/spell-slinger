@@ -1,8 +1,10 @@
-import json
 import requests
-import sys
 from bs4 import BeautifulSoup
+
+import json
+import sys
 from multiprocessing import Pool
+
 from pprint import pprint
 
 def main():
@@ -14,7 +16,8 @@ def main():
             print(spell)
     elif(sys.argv[1] == 'json'):
         p = Pool()
-        result = p.map(parseSpell, spells)
+        result = p.m
+        p(parseSpell, spells)
         p.close()
         p.join()
         with open("spells.json", "w+") as out:
