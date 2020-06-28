@@ -1,0 +1,2 @@
+NUM_PROC=50
+ASSETS='assets/'
