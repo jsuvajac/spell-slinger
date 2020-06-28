@@ -93,7 +93,7 @@ demiplane
 destructive-wave
 detect-evil-and-good
 detect-magic-ritual
-detect-poison-and-disease-ritual
+detect-poison-and-disease
 detect-thoughts
 dimension-door
 disguise-self
@@ -359,7 +359,6 @@ wrathful-smite
 zone-of-truth
 power-word-heal
 vicious-mockery
-trap-the-soul
 thunderclap
 earth-tremor
 pyrotechnics
