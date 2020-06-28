@@ -3,31 +3,35 @@ from bs4 import BeautifulSoup
 
 import json
 import sys
+import os
 from multiprocessing import Pool
 
 from pprint import pprint
 import config as cfg
 
+#in spell list but the spell page is broken
 bad_spells = ['trap-the-soul']
-def main():
-    #in spell list but the spell page is broken
 
-    result = [] 
-    spells = getSpellList()
+def main():
+
+    spells = []
 
     if (len(sys.argv) < 2):
-        print("invalid input, allowed options:\nlist\njson")
-        sys.exit(1)
+        print(f"Usage: \n\tlist \n\tjson \n\tspell [name-of-spell]")
+        sys.exit(0)
  
+    spells = getSpellList()
+    
     if (sys.argv[1] == 'list'):
         for spell in spells:
             print(spell)
 
     elif(sys.argv[1] == 'json'):
-        p = Pool(processes=cfg.NUM_PROC)
-        result = p.map(parseSpell, spells)
-        p.close()
-        p.join()
+        pool = Pool(processes=cfg.NUM_PROC)
+        result = pool.map(parseSpell, spells)
+        pool.close()
+        pool.join()
+
         with open(cfg.ASSETS+"spells.json", "w+") as out:
             out.write(json.dumps(result, indent=4, sort_keys=True))
 
@@ -35,8 +39,8 @@ def main():
         pprint(parseSpell(sys.argv[2]))
 
     else:
-        print("invalid input, allowed options:\nlist\njson")
-        sys.exit(1)
+        print(f"Usage: \n\tlist \n\tjson \n\tspell [name-of-spell]")
+        sys.exit(0)
         
 
 
@@ -44,10 +48,17 @@ def getSpellList():
     # general rule:
     # 'Name of Spell' -> 'name-of-spell'
 
+    spells = []
+
+    # cached spell list
+    if os.path.exists(cfg.SPELL_LIST_PATH):
+        with open(cfg.SPELL_LIST_PATH, "r") as spell_file:
+            for line in spell_file:
+                spells.append(line.rstrip())
+        return spells
+
     data = requests.get('https://www.dnd-spells.com/spells')
     soup = BeautifulSoup(data.text, 'html.parser')
-
-    spells = []
 
     for tr in soup.find_all('tr'):
         spell = [" ".join(td.text.split()) for td in tr.find_all('td') if td.text.split() != '']
