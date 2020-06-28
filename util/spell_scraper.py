@@ -118,12 +118,13 @@ def parseSpell(name):
     spell['Duration'] = text.pop(0).split(": ")[1]
 
     spell['Class'] = []
+    # format: A Class1, Clas2, ... spell
     while True:
         line = text.pop()
         if line == "A":
             break
         if line != 'spell':
-            spell['Class'].append(line)
+            spell['Class'].append(line[:-1]) # ommit ,
 
     spell['Page'] = text.pop().split(": ")[1]
 
