@@ -12,21 +12,14 @@ import config as cfg
 #in spell list but the spell page is broken
 bad_spells = ['trap-the-soul']
 
-def main():
-
-    spells = []
-
-    if (len(sys.argv) < 2):
-        print(f"Usage: \n\tlist \n\tjson \n\tspell [name-of-spell]")
-        sys.exit(0)
- 
+def main(arg):
     spells = getSpellList()
     
-    if (sys.argv[1] == 'list'):
+    if (arg == 'list'):
         for spell in spells:
             print(spell)
 
-    elif(sys.argv[1] == 'json'):
+    elif(arg == 'json'):
         pool = Pool(processes=cfg.NUM_PROC)
         result = pool.map(parseSpell, spells)
         pool.close()
@@ -35,7 +28,7 @@ def main():
         with open(cfg.ASSETS+"spells.json", "w+") as out:
             out.write(json.dumps(result, indent=4, sort_keys=True))
 
-    elif(sys.argv[1] == "spell" and sys.argv[2]):
+    elif(arg == "spell" and sys.argv[2]):
         pprint(parseSpell(sys.argv[2]))
 
     else:
@@ -148,4 +141,8 @@ def parseSpell(name):
     return spell
 
 if __name__ == "__main__":
-    main()
+    if (len(sys.argv) < 2):
+        print(f"Usage: \n\tlist \n\tjson \n\tspell [name-of-spell]")
+        sys.exit(0)
+    
+    main(sys.argv[1])
