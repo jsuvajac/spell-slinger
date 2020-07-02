@@ -1,13 +1,7 @@
-
-
-
-
-
 import numpy as np
 import matplotlib.mlab as mlab
 import matplotlib.pyplot as plt
 from collections import Counter
-
 
 
 def plotFrequencyBars(data,xaxis="",yaxis="",title=None ):
@@ -25,8 +19,6 @@ def plotFrequencyBars(data,xaxis="",yaxis="",title=None ):
     rects1 = ax.bar(labels,heights)
     plt.xticks(rotation='vertical')
     plt.show()
-    
-
 
 def plotHist(data,bins=100, discrete = False,xaxis="",yaxis="",title=None):
     if not title:

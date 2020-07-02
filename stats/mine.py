@@ -1,9 +1,12 @@
 import sys
 import json
-from enum import Enum,auto
+import pathlib
+import os
+from enum import Enum, auto
 
-from parser import Parser
-from plotting import plotHist,plotFrequencyBars
+from stats.parser import Parser
+from stats.plotting import plotHist, plotFrequencyBars
+import config as cfg
 
 
 def plotDuration(durationGen,bins=100):
@@ -27,7 +30,11 @@ def plotLevel(levelGen):
     plotHist(data,discrete=True,xaxis="Level",yaxis="Frequency")
 
 
-def main(jsonPath="/home/princeofpuppers/coding/python/dnd-spell-system/assets/spells.json"):
+def main():
+
+    dirname = os.path.abspath(os.path.dirname(__file__))
+    jsonPath = os.path.join(dirname, '../assets/spells.json')
+
     file = open(jsonPath)
     jsonArray=json.load(file)
     
@@ -44,4 +51,7 @@ def main(jsonPath="/home/princeofpuppers/coding/python/dnd-spell-system/assets/s
 
 
 if __name__ == "__main__":
+    if len(sys.argv) != 1:
+        sys.exit(0)
+
     main()

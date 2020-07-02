@@ -1,6 +1,7 @@
 import json
 import sys
 from pymongo import MongoClient
+
 import config as cfg
 
 def main(arg):
@@ -23,8 +24,8 @@ def main(arg):
         sys.exit(1)
 
 if __name__ == "__main__":
-    if (len(sys.argv) < 2):
-        print('invalid input, allowed options:\ndrop\nload')
+    if (len(sys.argv) != 2):
+        print('Usage:\n\tdrop\n\tload')
         sys.exit(0)
     
     main(sys.argv[1])

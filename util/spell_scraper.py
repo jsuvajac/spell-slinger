@@ -1,25 +1,25 @@
-import requests
-from bs4 import BeautifulSoup
-
 import json
 import sys
 import os
 from multiprocessing import Pool
-
 from pprint import pprint
+
+import requests
+from bs4 import BeautifulSoup
+
 import config as cfg
 
 #in spell list but the spell page is broken
 bad_spells = ['trap-the-soul']
 
-def main(arg):
+def main(args):
     spells = getSpellList()
     
-    if (arg == 'list'):
+    if (args[0] == 'list'):
         for spell in spells:
             print(spell)
 
-    elif(arg == 'json'):
+    elif(args[0] == 'json'):
         pool = Pool(processes=cfg.NUM_PROC)
         result = pool.map(parseSpell, spells)
         pool.close()
@@ -28,13 +28,13 @@ def main(arg):
         with open(cfg.ASSETS+"spells.json", "w+") as out:
             out.write(json.dumps(result, indent=4, sort_keys=True))
 
-    elif(arg == "spell" and sys.argv[2]):
-        pprint(parseSpell(sys.argv[2]))
+    elif(args[0] == "spell" and len(args) == 2):
+        if args[1] in spells:
+            pprint(parseSpell(args[1]))
 
     else:
         print(f"Usage: \n\tlist \n\tjson \n\tspell [name-of-spell]")
         sys.exit(0)
-        
 
 
 def getSpellList():
@@ -141,8 +141,8 @@ def parseSpell(name):
     return spell
 
 if __name__ == "__main__":
-    if (len(sys.argv) < 2):
+    if (len(sys.argv) not in  [2, 3]):
         print(f"Usage: \n\tlist \n\tjson \n\tspell [name-of-spell]")
         sys.exit(0)
     
-    main(sys.argv[1])
+    main(sys.argv[1:])
