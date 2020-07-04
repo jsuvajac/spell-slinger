@@ -81,7 +81,7 @@ class SpellCard extends React.Component {
               {'Source: ' + this.props.spell['Page']}
             </Typography>
             <Typography className={this.props.card_text} color="textSecondary">
-              {'this.props: (' + this.props.spell['Class'].slice(-1) + ')'}
+              {'Class: (' + this.props.spell['Class'].slice(-1) + ')'}
             </Typography>
             <Typography className={this.props.card_text} color="textSecondary">
               {'Casting time:' + this.props.spell['Casting time']}
