@@ -4,6 +4,11 @@ import { TextField, Button } from '@material-ui/core';
 
 
 class SpellForm extends React.Component {
+  constructor(props){
+    super(props);
+    this.state = { spell: "" };
+  }
+
   render() {
     return (
       <Formik
@@ -13,14 +18,17 @@ class SpellForm extends React.Component {
         }}
       >
         {({ values, handleChange, handleBlur, handleSubmit }) => (
-          <form onSubmit={handleChange}>
+          <form onSubmit={handleSubmit} onChange={handleChange}>
             <TextField
               name="spell"
-              onChange={handleChange}
+              onChange={data => {
+                this.setState({spell: data.currentTarget.value})
+                this.props.updateSpell(data.currentTarget.value)
+                //console.log(this.state);
+              }}
               onBlur={handleBlur}
             />
             <Button type="submit">submit</Button>
-            <pre>{JSON.stringify(values, null, 2)}</pre>
           </form>
         )}</Formik>
 

@@ -4,7 +4,6 @@ import { withStyles } from '@material-ui/core';
 import { Grid } from '@material-ui/core';
 
 import SpellCard from '../components/spell_card';
-import SpellsData from '../data/spells.json';
 
 
 const styles = {
@@ -27,11 +26,10 @@ class SpellList extends React.Component {
       >
 
         {
-          SpellsData.slice(0, 5).map((spell, index) => {
+          this.props.spells.map((spell, index) => {
             return (
-
-              <Grid item>
-                <SpellCard spell={spell} key={index} />
+              <Grid item key={index} >
+                <SpellCard spell={spell}/>
               </Grid>
               );
             })
