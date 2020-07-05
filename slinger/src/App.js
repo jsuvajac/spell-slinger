@@ -8,7 +8,6 @@ import SpellsData from './data/spells.json';
 import './App.css';
 
 
-
 class SpellApp extends React.Component {
   constructor(props) {
     super(props);
@@ -18,12 +17,15 @@ class SpellApp extends React.Component {
     }
   }
 
-  filter(name) {
+  updateSpellList(name) {
     if (name.length >= 3) {
       this.setState({
         spells_curr:
           this.state.spells.filter((spell) => {
-            return spell.Name.toLowerCase().includes(name)
+            return (
+              spell.Name.toLowerCase()
+                        .includes(name.toLowerCase())
+            );
           })
       });
     }
@@ -33,15 +35,25 @@ class SpellApp extends React.Component {
     return (
       <div className="App">
         <header className="App-header">
-          <Typography variant="h2" component="h2">
+          <Typography
+            variant="h2"
+            component="h2"
+            onClick={() => {
+              console.log("reset");
+              if (this.state.spells.length !== this.state.spells_curr.length) {
+                this.setState({
+                  spells_curr: this.state.spells
+                })
+              }
+            }}
+          >
             Spell Slinger
           </Typography>
         </header>
 
-        <SpellForm updateSpell={this.filter.bind(this)} />
+        <SpellForm updateSpell={this.updateSpellList.bind(this)} />
 
         <div className="App-spells">
-          <br />
           <br />
           <SpellList spells={this.state.spells_curr} />
         </div>

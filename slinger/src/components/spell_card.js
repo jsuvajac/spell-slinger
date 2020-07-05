@@ -9,13 +9,12 @@ import { withStyles } from '@material-ui/core';
 
 const styles = {
   root: {
-    width: '30',
-    height: '45',
+    width: 1/2,
+    height: 1/2,
   },
   card_text: {
-    align: 'left',
-    display: 'inline',
     marginBottom: 12,
+    marginTop: 12,
   }
 };
 
@@ -29,6 +28,7 @@ class SpellCard extends React.Component {
   }
 
   render() {
+    // Back - spell text
     if (this.state.flip_back) {
       return (
         <Card className={this.props.root}>
@@ -37,19 +37,29 @@ class SpellCard extends React.Component {
               {this.props.spell['Name']}
             </Typography>
 
-            <Typography paragraph className={this.props.card_text} color="textSecondary">
-              {this.props.spell['Text']}
-            </Typography>
-
+            {
+              this.props.spell['Text'].map((line, index) => {
+                return (
+                  <Typography
+                    paragraph
+                    key={index}
+                    className={this.props.card_text}
+                    color="textSecondary"
+                    >
+                    {line}
+                  </Typography>
+                );
+              })
+            }
           </CardContent>
 
           <CardActions>
             <Button
               size="small"
-              onClick={() => { 
-                this.setState({flip_back: !this.state.flip_back})
+              onClick={() => {
+                this.setState({ flip_back: !this.state.flip_back })
               }}
-              >
+            >
               Flip
             </Button>
           </CardActions>
@@ -57,7 +67,7 @@ class SpellCard extends React.Component {
         </Card>
       )
     } else {
-
+      // front: spell stats
       return (
         <Card className={this.props.root}>
           <CardContent>
@@ -92,10 +102,10 @@ class SpellCard extends React.Component {
           <CardActions>
             <Button
               size="small"
-              onClick={() => { 
-                this.setState({flip_back: !this.state.flip_back})
+              onClick={() => {
+                this.setState({ flip_back: !this.state.flip_back })
               }}
-              >
+            >
               Flip
             </Button>
           </CardActions>
