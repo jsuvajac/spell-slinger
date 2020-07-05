@@ -100,7 +100,14 @@ def parseSpell(name):
     spell = {}
 
     spell['Name'] = text.pop(0).replace(u'\u2019', "'")
-    spell['School'] = text.pop(0)
+    if "(Ritual)" in spell['Name']:
+        spell['Name'] = spell['Name'].split(" (")[0]
+        spell['Ritual'] = True
+    else:
+        spell['Ritual'] = False
+
+    spell['School'] = text.pop(0).split(" ")[-1]
+
     spell['Level'] = text.pop(0).split(": ")[1]
     spell['Casting time'] = text.pop(0).split(": ")[1]
     spell['Range'] = text.pop(0).split(": ")[1]
