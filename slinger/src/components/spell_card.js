@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
@@ -7,18 +8,15 @@ import Button from '@material-ui/core/Button';
 
 import { withStyles } from '@material-ui/core';
 
-const styles = {
+const styles = theme => ({
   root: {
-    width: 1 / 2,
-    height: 1 / 2,
+    maxWidth: 500,
   },
-  card_field: {
+  card_content: {
   },
   card_text: {
-    marginBottom: 12,
-    marginTop: 12,
   }
-};
+});
 
 
 class SpellCard extends React.Component {
@@ -56,10 +54,11 @@ class SpellCard extends React.Component {
       );
   }
   render() {
+    const { classes } = this.props;
     // Back - spell text
     if (this.state.flip_back) {
       return (
-        <Card className={this.props.root}>
+        <Card className={classes.root}>
           <CardContent>
             <Typography variant="h5" component="h2">
               {this.props.spell['Name']}
@@ -71,7 +70,7 @@ class SpellCard extends React.Component {
                   <Typography
                     paragraph
                     key={index}
-                    className={this.props.card_text}
+                    className={classes.card_text}
                     color="textSecondary"
                   >
                     {line}
@@ -97,7 +96,7 @@ class SpellCard extends React.Component {
     } else {
       // front: spell stats
       return (
-        <Card className={this.props.root}>
+        <Card className={classes.root}>
           <CardContent>
             <Typography variant="h5" component="h2">
               {this.props.spell['Name']}
@@ -107,45 +106,45 @@ class SpellCard extends React.Component {
               this.displayKeyVal(
                 'Level: ',
                 this.props.spell['Level'],
-                this.props
+                classes
               )}
             {
               this.displayKeyVal(
                 'Range: ',
                 this.props.spell['Range'],
-                this.props
+                classes
               )}
             {
               this.displayKeyVal(
                 'Components: ',
                 this.props.spell['Components'],
-                this.props
+                classes
               )}
             {
               this.displayKeyVal(
                 'Duration: ',
                 this.props.spell['Duration'],
-                this.props
+                classes
               )}
             {/*
               this.displayKeyVal(
                 'Source: ',
                 this.props.spell['Page'],
-                this.props
+                classes
               )*/
             }
             {
               this.displayKeyVal(
                 'Class: (',
                 this.props.spell['Class'],
-                this.props,
+                classes,
                 ")   "
               )}
             {
               this.displayKeyVal(
                 'Casting time: ',
                 this.props.spell['Casting time'],
-                this.props
+                classes
               )}
 
 
@@ -168,5 +167,9 @@ class SpellCard extends React.Component {
     }
   }
 }
+
+SpellCard.propTypes = {
+  classes: PropTypes.object.isRequired,
+};
 
 export default withStyles(styles)(SpellCard);

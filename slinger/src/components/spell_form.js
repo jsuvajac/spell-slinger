@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Formik } from "formik"
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
@@ -52,4 +53,10 @@ class SpellForm extends React.Component {
     );
   }
 }
+
+SpellForm.propTypes = {
+  classes: PropTypes.object.isRequired,
+};
+
+
 export default withStyles(styles)(SpellForm);
