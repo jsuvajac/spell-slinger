@@ -9,8 +9,10 @@ import { withStyles } from '@material-ui/core';
 
 const styles = {
   root: {
-    width: 1/2,
-    height: 1/2,
+    width: 1 / 2,
+    height: 1 / 2,
+  },
+  card_field: {
   },
   card_text: {
     marginBottom: 12,
@@ -18,15 +20,41 @@ const styles = {
   }
 };
 
+
 class SpellCard extends React.Component {
   constructor(props) {
     super(props);
     this.state = { flip_back: false };
   }
 
-  flip() {
-  }
+  displayKeyVal(key, val, props, key2 = null) {
+    return key2 === null ? (
+      <div style={{ display: "flex" }}>
+        <Typography className={props.card_field} color="textPrimary" >
+          {key}
+        </Typography>
 
+        <Typography className={props.card_text} color="textSecondary">
+          {val}
+        </Typography>
+      </div>
+
+    ) : (
+        <div style={{ display: "flex" }}>
+          <Typography className={props.card_field} color="textPrimary" >
+            {key}
+          </Typography>
+
+          <Typography className={props.card_text} color="textSecondary">
+            {val}
+          </Typography>
+          <Typography className={props.card_field} color="textPrimary" >
+            {key2}
+          </Typography>
+        </div>
+
+      );
+  }
   render() {
     // Back - spell text
     if (this.state.flip_back) {
@@ -45,7 +73,7 @@ class SpellCard extends React.Component {
                     key={index}
                     className={this.props.card_text}
                     color="textSecondary"
-                    >
+                  >
                     {line}
                   </Typography>
                 );
@@ -75,29 +103,51 @@ class SpellCard extends React.Component {
               {this.props.spell['Name']}
             </Typography>
 
-            <Typography className={this.props.card_text} color="textSecondary">
-              {'Level: ' + this.props.spell['Level']}
-            </Typography>
-            <Typography className={this.props.card_text} color="textSecondary">
-              {'Range: ' + this.props.spell['Range']}
-            </Typography>
-            <Typography className={this.props.card_text} color="textSecondary">
-              {'Components: ' + this.props.spell['Components']}
-            </Typography>
-            <Typography className={this.props.card_text} color="textSecondary">
-              {'Duration: ' + this.props.spell['Duration']}
-            </Typography>
+            {
+              this.displayKeyVal(
+                'Level: ',
+                this.props.spell['Level'],
+                this.props
+              )}
+            {
+              this.displayKeyVal(
+                'Range: ',
+                this.props.spell['Range'],
+                this.props
+              )}
+            {
+              this.displayKeyVal(
+                'Components: ',
+                this.props.spell['Components'],
+                this.props
+              )}
+            {
+              this.displayKeyVal(
+                'Duration: ',
+                this.props.spell['Duration'],
+                this.props
+              )}
             {/*
-            <Typography className={this.props.card_text} color="textSecondary">
-              {'Source: ' + this.props.spell['Page']}
-            </Typography>
-            */}
-            <Typography className={this.props.card_text} color="textSecondary">
-              {'Class: (' + this.props.spell['Class'].slice(-1) + ')'}
-            </Typography>
-            <Typography className={this.props.card_text} color="textSecondary">
-              {'Casting time:' + this.props.spell['Casting time']}
-            </Typography>
+              this.displayKeyVal(
+                'Source: ',
+                this.props.spell['Page'],
+                this.props
+              )*/
+            }
+            {
+              this.displayKeyVal(
+                'Class: (',
+                this.props.spell['Class'],
+                this.props,
+                ")   "
+              )}
+            {
+              this.displayKeyVal(
+                'Casting time: ',
+                this.props.spell['Casting time'],
+                this.props
+              )}
+
 
           </CardContent>
 
