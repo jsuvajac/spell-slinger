@@ -11,9 +11,14 @@ import './App.css';
 class SpellApp extends React.Component {
   constructor(props) {
     super(props);
+    let data = SpellsData.map((spell) => {
+      spell.render = true;
+      return spell;
+    })
+
     this.state = {
-      spells: SpellsData,
-      spells_curr: SpellsData
+      spells: data,
+      spells_curr: data
     }
   }
 
@@ -21,11 +26,16 @@ class SpellApp extends React.Component {
     if (name.length >= 3) {
       this.setState({
         spells_curr:
-          this.state.spells.filter((spell) => {
-            return (
-              spell.Name.toLowerCase()
-                        .includes(name.toLowerCase())
-            );
+          this.state.spells.map((spell) => {
+            if (spell
+              .Name
+              .toLowerCase()
+              .match(new RegExp(name.toLowerCase()))) {
+              spell.render = true
+            } else {
+              spell.render = false
+            }
+            return spell;
           })
       });
     }
@@ -40,11 +50,13 @@ class SpellApp extends React.Component {
             component="h2"
             onClick={() => {
               console.log("reset");
-              if (this.state.spells.length !== this.state.spells_curr.length) {
-                this.setState({
-                  spells_curr: this.state.spells
-                })
-              }
+              this.setState({
+                spells_curr:
+                  this.state.spells_curr.map((spell) => {
+                    spell.render = true;
+                    return spell;
+                  })
+              })
             }}
           >
             Spell Slinger
@@ -57,7 +69,7 @@ class SpellApp extends React.Component {
           <br />
           <SpellList spells={this.state.spells_curr} />
         </div>
-      </div>
+      </div >
     );
   }
 }

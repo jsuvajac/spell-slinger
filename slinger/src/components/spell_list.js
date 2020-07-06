@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core';
-import { Grid } from '@material-ui/core';
+import Grid from '@material-ui/core/Grid';
 
 import SpellCard from '../components/spell_card';
 
@@ -9,9 +9,8 @@ import SpellCard from '../components/spell_card';
 const styles = theme => ({
   root: {
     width: "100%",
-    height: "100%",
     margin: 0,
-    padding: 20,
+    padding: 0,
   },
   item: {
     margin: 10,
@@ -28,16 +27,19 @@ class SpellList extends React.Component {
         container
         className={classes.root}
         direction="row"
-        justify="left"
+        justify="center"
         alignItems="center"
       >
+
 
         {
           this.props.spells.map((spell, index) => {
             return (
-              <Grid item key={index} className={classes.item}>
-                <SpellCard spell={spell} />
-              </Grid>
+              spell.render ?
+                <Grid item key={index} className={classes.item} xs={7} md={5} lg={3} xl={2}>
+                  <SpellCard spell={spell} />
+                </Grid>
+                : null
             );
           })
         }
