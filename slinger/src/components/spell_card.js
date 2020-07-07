@@ -10,7 +10,8 @@ import { withStyles } from '@material-ui/core';
 
 const styles = theme => ({
   root: {
-    maxWidth: 500,
+    height: "100%",
+    width: "100%",
   },
   card_content: {
   },
@@ -25,29 +26,17 @@ class SpellCard extends React.Component {
     this.state = { flip_back: false };
   }
 
-  displayKeyVal(key, val, props, key2 = null) {
-    return key2 === null ? (
-      <div style={{ display: "flex" }}>
-        <Typography className={props.card_field} color="textPrimary" >
-          {key}
-        </Typography>
-
-        <Typography className={props.card_text} color="textSecondary">
-          {val}
-        </Typography>
-      </div>
-
-    ) : (
+  displayKeyVal(key, val, key2 = null) {
+    const { classes } = this.props;
+    return (
         <div style={{ display: "flex" }}>
-          <Typography className={props.card_field} color="textPrimary" >
+          <Typography className={classes.card_field} color="textPrimary" >
             {key}
-          </Typography>
 
-          <Typography className={props.card_text} color="textSecondary">
-            {val}
-          </Typography>
-          <Typography className={props.card_field} color="textPrimary" >
-            {key2}
+            <Typography className={classes.card_text} color="textSecondary" component="span">
+              {val}
+            </Typography>
+            {key2 === null ? null : key2}
           </Typography>
         </div>
 
@@ -105,46 +94,39 @@ class SpellCard extends React.Component {
             {
               this.displayKeyVal(
                 'Level: ',
-                this.props.spell['Level'],
-                classes
+                this.props.spell['Level']
               )}
             {
               this.displayKeyVal(
                 'Range: ',
-                this.props.spell['Range'],
-                classes
+                this.props.spell['Range']
               )}
             {
               this.displayKeyVal(
                 'Components: ',
-                this.props.spell['Components'],
-                classes
+                this.props.spell['Components']
               )}
             {
               this.displayKeyVal(
                 'Duration: ',
-                this.props.spell['Duration'],
-                classes
+                this.props.spell['Duration']
               )}
             {/*
               this.displayKeyVal(
                 'Source: ',
-                this.props.spell['Page'],
-                classes
+                this.props.spell['Page']
               )*/
             }
             {
               this.displayKeyVal(
                 'Class: (',
-                this.props.spell['Class'],
-                classes,
+                this.props.spell['Class'].join(", "),
                 ")   "
               )}
             {
               this.displayKeyVal(
                 'Casting time: ',
-                this.props.spell['Casting time'],
-                classes
+                this.props.spell['Casting time']
               )}
 
 
