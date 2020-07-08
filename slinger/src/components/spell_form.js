@@ -14,7 +14,7 @@ const styles = {
 };
 
 
-class SpellForm extends React.Component {
+class SpellForm extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = { spell: "" };
@@ -25,9 +25,6 @@ class SpellForm extends React.Component {
 
         <Formik
           initialValues={{ spell: "test" }}
-          onSubmit={data => {
-            console.log(data);
-          }}
         >
           {({ values, handleChange, handleBlur, handleSubmit }) => (
             <form

@@ -11,21 +11,43 @@ import './App.css';
 class SpellApp extends React.Component {
   constructor(props) {
     super(props);
-    let data = SpellsData.map((spell) => {
+    let data = SpellsData.map((spell, index) => {
       spell.render = true;
+      spell.index = index;
       return spell;
     })
 
     this.state = {
-      spells: data,
-      spells_curr: data
+      spells: data,           // List of JSON objecst spells
+      spellBooks: {},          // set of indices 
+      spellBookNames: []
     }
   }
 
-  updateSpellList(name) {
-    if (name.length >= 3) {
+  updateSpellBook(spell, book) {
+    if (book in this.state.spellBooks) {
+      // add to existing spell-book
       this.setState({
-        spells_curr:
+        spellBooks: {
+          [book]: this.state.spellBooks[book].add(spell.index)
+        }
+      });
+    } else {
+      // new spell-book
+      this.setState({
+        spellBooks: {
+          [book]: new Set([spell.index])
+        },
+        spellBookNames:
+            this.state.spellBookNames.concat([book])
+      });
+    }
+    console.info(this.state.spellBooks);
+  }
+
+  updateSpellList(name) {
+      this.setState({
+        spells:
           this.state.spells.map((spell) => {
             if (spell
               .Name
@@ -38,7 +60,7 @@ class SpellApp extends React.Component {
             return spell;
           })
       });
-    }
+    
   }
 
   render() {
@@ -51,8 +73,8 @@ class SpellApp extends React.Component {
             onClick={() => {
               console.log("reset");
               this.setState({
-                spells_curr:
-                  this.state.spells_curr.map((spell) => {
+                spells:
+                  this.state.spells.map((spell) => {
                     spell.render = true;
                     return spell;
                   })
@@ -66,8 +88,21 @@ class SpellApp extends React.Component {
         <SpellForm updateSpell={this.updateSpellList.bind(this)} />
 
         <div className="App-spells">
+          {this.state.spellBookNames.length === 1?
+          //console.log(Array.from(this.state.spellBooks[this.state.spellBookNames[0]]).map((index) => this.state.spells[index]))
+          ///*
+          <SpellList
+            updateSpellBook={() => {console.log("dummy stub")}}
+            spells={this.state.spellBookNames.length === 1?
+              Array.from(this.state.spellBooks[this.state.spellBookNames[0]]).map((index) => this.state.spells[index]).copyWithin()
+              :
+              null
+            }
+           />
+           //*/
+           : null }
           <br />
-          <SpellList spells={this.state.spells_curr} />
+          <SpellList spells={this.state.spells} updateSpellBook={this.updateSpellBook.bind(this)} />
         </div>
       </div >
     );

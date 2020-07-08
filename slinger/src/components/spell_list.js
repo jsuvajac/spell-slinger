@@ -28,12 +28,11 @@ const theme = createMuiTheme({
   }
 });
 
-class SpellList extends React.Component {
+class SpellList extends React.PureComponent {
   render() {
     const { classes } = this.props;
     return (
       <MuiThemeProvider theme={theme}>
-
         <Grid
           container
           className={classes.root}
@@ -57,7 +56,7 @@ class SpellList extends React.Component {
                     lg={2}
                     xl={1}
                   >
-                    <SpellCard spell={spell} />
+                    <SpellCard spell={spell} updateSpellBook={this.props.updateSpellBook}/>
                   </Grid>
                   : null
               );
