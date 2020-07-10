@@ -56,7 +56,10 @@ class SpellList extends React.PureComponent {
                     lg={2}
                     xl={1}
                   >
-                    <SpellCard spell={spell} updateSpellBook={this.props.updateSpellBook}/>
+                    <SpellCard
+                     spell={spell}
+                     updateSpellBook={this.props.updateSpellBook}
+                     />
                   </Grid>
                   : null
               );

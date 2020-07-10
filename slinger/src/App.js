@@ -7,6 +7,13 @@ import SpellsData from './data/spells.json';
 
 import './App.css';
 
+function encodeSpellBook(book) {
+    let buff = new Uint16Array(book);
+    buff.forEach((item) => {
+      console.log(item);
+    });
+    return buff;
+}
 
 class SpellApp extends React.Component {
   constructor(props) {
@@ -19,8 +26,8 @@ class SpellApp extends React.Component {
 
     this.state = {
       spells: data,           // List of JSON objecst spells
-      spellBooks: {},          // set of indices 
-      spellBookNames: []
+      spellBooks: {},         // set of indices 
+      spellBookNames: []      // list of names of spell books
     }
   }
 
@@ -39,28 +46,29 @@ class SpellApp extends React.Component {
           [book]: new Set([spell.index])
         },
         spellBookNames:
-            this.state.spellBookNames.concat([book])
+          this.state.spellBookNames.concat([book])
       });
     }
+    console.log(encodeSpellBook(this.state.spellBooks[book]));
     console.info(this.state.spellBooks);
   }
 
   updateSpellList(name) {
-      this.setState({
-        spells:
-          this.state.spells.map((spell) => {
-            if (spell
-              .Name
-              .toLowerCase()
-              .match(new RegExp(name.toLowerCase()))) {
-              spell.render = true
-            } else {
-              spell.render = false
-            }
-            return spell;
-          })
-      });
-    
+    this.setState({
+      spells:
+        this.state.spells.map((spell) => {
+          if (spell
+            .Name
+            .toLowerCase()
+            .match(new RegExp(name.toLowerCase()))) {
+            spell.render = true
+          } else {
+            spell.render = false
+          }
+          return spell;
+        })
+    });
+
   }
 
   render() {
@@ -88,23 +96,26 @@ class SpellApp extends React.Component {
         <SpellForm updateSpell={this.updateSpellList.bind(this)} />
 
         <div className="App-spells">
-          {this.state.spellBookNames.length === 1?
-          //console.log(Array.from(this.state.spellBooks[this.state.spellBookNames[0]]).map((index) => this.state.spells[index]))
-          ///*
-          <SpellList
-            updateSpellBook={() => {console.log("dummy stub")}}
-            spells={this.state.spellBookNames.length === 1?
-              Array.from(this.state.spellBooks[this.state.spellBookNames[0]]).map((index) => this.state.spells[index]).copyWithin()
-              :
-              null
-            }
-           />
-           //*/
-           : null }
-          <br />
-          <SpellList spells={this.state.spells} updateSpellBook={this.updateSpellBook.bind(this)} />
-        </div>
-      </div >
+          {/*}
+          <div className="Temp-spell-book">
+            {
+              this.state.spellBookNames.length === 1 ?
+              //console.log(Array.from(this.state.spellBooks[this.state.spellBookNames[0]]).map((index) => this.state.spells[index]))
+              <SpellList
+                updateSpellBook={() => { console.log("dummy stub") }}
+                spells={this.state.spellBookNames.length === 1 ?
+                  Array.from(this.state.spellBooks[this.state.spellBookNames[0]]).map((index) => this.state.spells[index]).copyWithin()
+                  :
+                  null
+                }
+              />
+              : null}
+            </div>
+            */}
+            <br />
+            <SpellList spells={this.state.spells} updateSpellBook={this.updateSpellBook.bind(this)} />
+          </div>
+        </div >
     );
   }
 }
