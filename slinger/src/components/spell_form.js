@@ -1,18 +1,9 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { Formik } from "formik"
-import TextField from '@material-ui/core/TextField';
-import Button from '@material-ui/core/Button';
-import { withStyles } from '@material-ui/core';
-
-const styles = {
-  root: {
-    display: 'flex',
-    flexWrap: 'wrap',
-    width: '25ch',
-  },
-};
-
+import React from "react";
+import { Formik } from "formik";
+import TextField from "@material-ui/core/TextField";
+//import IconButton from "@material-ui/core/Button";
+import SearchIcon from "@material-ui/icons/Search";
+import { InputAdornment } from "@material-ui/core";
 
 class SpellForm extends React.PureComponent {
   constructor(props) {
@@ -22,38 +13,41 @@ class SpellForm extends React.PureComponent {
 
   render() {
     return (
+      <Formik initialValues={{ spell: "test" }}>
+        {({ values, handleChange, handleBlur, handleSubmit }) => (
+          <form
+            align="center"
+            onSubmit={handleSubmit}
+            onChange={handleChange}
+            className={this.props.root}
+          >
+            {/*
+            <IconButton type="submit">
+              <SearchIcon />
+            </IconButton>
+            */}
 
-        <Formik
-          initialValues={{ spell: "test" }}
-        >
-          {({ values, handleChange, handleBlur, handleSubmit }) => (
-            <form
-             align="center"
-             onSubmit={handleSubmit}
-             onChange={handleChange}
-             className={this.props.root}
-             >
-               
-              <TextField
-                name="spell"
-                onChange={data => {
-                  this.setState({ spell: data.currentTarget.value })
-                  this.props.updateSpell(data.currentTarget.value)
-                  //console.log(this.state);
-                }}
-                onBlur={handleBlur}
-              />
-              <Button type="submit">submit</Button>
-            </form>
-          )}
-        </Formik>
+            <TextField
+              name="spell"
+              onChange={(data) => {
+                this.setState({ spell: data.currentTarget.value });
+                this.props.updateSpell(data.currentTarget.value);
+                //console.log(this.state);
+              }}
+              onBlur={handleBlur}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <SearchIcon />
+                  </InputAdornment>
+                ),
+              }}
+            />
+          </form>
+        )}
+      </Formik>
     );
   }
 }
 
-SpellForm.propTypes = {
-  classes: PropTypes.object.isRequired,
-};
-
-
-export default withStyles(styles)(SpellForm);
+export default SpellForm;
