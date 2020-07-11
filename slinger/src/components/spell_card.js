@@ -35,7 +35,6 @@ class SpellCard extends React.PureComponent {
     this.state = {
       flip_back: false,
       to_add: true,
-      num: 0,
     };
     if (props.to_add) {
       this.setState({ to_add: props.to_add });
@@ -114,7 +113,7 @@ class SpellCard extends React.PureComponent {
             onClick={() => {
               this.props.updateSpellBook(
                 this.props.spell,
-                "testBook" + this.state.num
+                "testBook"
               );
               this.setState({
                 num: this.state.num + 1,

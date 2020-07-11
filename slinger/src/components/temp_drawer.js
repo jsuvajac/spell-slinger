@@ -1,4 +1,6 @@
 import React from "react";
+import { useHistory } from "react-router-dom";
+
 import clsx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
 import Drawer from "@material-ui/core/Drawer";
@@ -29,6 +31,8 @@ const useStyles = makeStyles({
 
 export default function TemporaryDrawer(props) {
   const classes = useStyles();
+  const history = useHistory();
+
   const [state, setState] = React.useState({
     top: false,
     left: false,
@@ -36,6 +40,9 @@ export default function TemporaryDrawer(props) {
     right: false,
   });
 
+  const handleRouteClick = (route) => {
+    history.push(route);
+  };
   const toggleDrawer = (anchor, open) => (event) => {
     if (
       event.type === "keydown" &&
@@ -58,7 +65,13 @@ export default function TemporaryDrawer(props) {
     >
       <List>
         {["search"].map((text, index) => (
-          <ListItem button key={text}>
+          <ListItem
+            button
+            key={text}
+            onClick={() => {
+              handleRouteClick("/");
+            }}
+          >
             <ListItemIcon>
               <SearchIcon />
             </ListItemIcon>
@@ -75,9 +88,15 @@ export default function TemporaryDrawer(props) {
       <Divider />
       <List>
         {props.spellBooks.map((text, index) => (
-          <ListItem button key={text}>
+          <ListItem
+            button
+            key={text}
+            onClick={() => {
+              handleRouteClick("/"+text);
+            }}
+          >
             <ListItemIcon>
-              <MenuBookIcon/>
+              <MenuBookIcon />
             </ListItemIcon>
             <ListItemText primary={text} />
           </ListItem>
