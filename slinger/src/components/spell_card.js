@@ -17,8 +17,6 @@ import FlipIcon from "@material-ui/icons/Flip";
 
 import { withStyles } from "@material-ui/core";
 
-
-
 const styles = (theme) => ({
   root: {
     height: "100%",
@@ -26,7 +24,9 @@ const styles = (theme) => ({
     color: "purple",
   },
   card_content: {},
-  card_text: {},
+  card_text: {
+    color: "textPrimary",
+  },
 });
 
 class SpellCard extends React.PureComponent {
@@ -65,40 +65,71 @@ class SpellCard extends React.PureComponent {
       <Card className={classes.root}>
         <CardContent>
           <Typography variant="h5" component="h2">
-            {this.props.spell["Name"]}
+            {this.props.spell["name"]}
           </Typography>
-          {this.state.flip_back
-            ? this.props.spell["Text"].map((line, index) => {
-                return (
-                  <Typography
-                    paragraph
-                    key={index}
-                    className={classes.card_text}
-                    color="textSecondary"
-                  >
-                    {line}
-                  </Typography>
-                );
-              })
-            : null}
+
           {/*
-          // front and back: spell stats
+          // back
           */}
-          {this.displayKeyVal("Level: ", this.props.spell["Level"])}
-          {this.displayKeyVal("Range: ", this.props.spell["Range"])}
-          {this.displayKeyVal("Components: ", this.props.spell["Components"])}
-          {this.displayKeyVal("Duration: ", this.props.spell["Duration"])}
-          {/*this.displayKeyVal('Source: ', this.props.spell['Page'])*/}
+          {this.state.flip_back ? (
+            this.props.spell["higher_level"] ? (
+              <React.Fragment>
+                <Typography
+                  color="textSecondary"
+                  dangerouslySetInnerHTML={{ __html: this.props.spell["desc"] }}
+                />
+                <Typography color="textSecondary" component="p">
+                  At higher levels:
+                </Typography>
+                <Typography
+                  color="textSecondary"
+                  dangerouslySetInnerHTML={{
+                    __html: this.props.spell["higher_level"],
+                  }}
+                />
+              </React.Fragment>
+            ) : (
+              <Typography
+                color="textSecondary"
+                dangerouslySetInnerHTML={{ __html: this.props.spell["desc"] }}
+              />
+            )
+          ) : null}
+
+          {/*
+          // front
+          */}
+          {this.displayKeyVal("Level: ", this.props.spell["level_desc"])}
+          {this.displayKeyVal("Range: ", this.props.spell["range"])}
           {this.displayKeyVal(
-            "Class: (",
-            this.props.spell["Class"].join(", "),
-            ")"
+            "Components: ",
+            this.props.spell["component_desc"]
           )}
+          {this.props.spell["material_cost"]
+            ? this.displayKeyVal(
+                "Materials: ",
+                this.props.spell["material_desc"]
+              )
+            : null}
+          {this.displayKeyVal("Duration: ", this.props.spell["duration"])}
+
+          {this.state.flip_back
+            ? this.displayKeyVal(
+                "Source: ",
+                this.props.spell["source"] + " pg " +
+                this.props.spell["page"]
+              )
+            : null}
+          {this.displayKeyVal("Class: (", this.props.spell["class_desc"], ")")}
           {this.displayKeyVal(
             "Casting time: ",
-            this.props.spell["Casting time"]
+            this.props.spell["casting_time"]
           )}
 
+          {this.props.spell["ritual"] ? this.displayKeyVal("Ritual", "") : null}
+          {this.props.spell["concentration"]
+            ? this.displayKeyVal("Concentration", "")
+            : null}
         </CardContent>
 
         <CardActions>
@@ -111,16 +142,12 @@ class SpellCard extends React.PureComponent {
           </IconButton>
           <IconButton
             onClick={() => {
-              this.props.updateSpellBook(
-                this.props.spell,
-                "testBook"
-              );
+              this.props.updateSpellBook(this.props.spell, "testBook");
               this.setState({
                 num: this.state.num + 1,
               });
             }}
           >
-
             {this.state.to_add ? <AddIcon /> : <RemoveIcon />}
           </IconButton>
         </CardActions>

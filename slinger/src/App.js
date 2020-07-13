@@ -104,7 +104,7 @@ class SpellApp extends React.Component {
   updateSpellList(name) {
     this.setState({
       spells: this.state.spells.map((spell) => {
-        if (spell.Name.toLowerCase().match(new RegExp(name.toLowerCase()))) {
+        if (spell.name.toLowerCase().match(new RegExp(name.toLowerCase()))) {
           spell.render = true;
         } else {
           spell.render = false;
