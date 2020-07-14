@@ -56,14 +56,18 @@ class SpellApp extends React.Component {
     history.push("/");
   };
 
+  // TODO: Refactor the spell book api
   // Create a new empty spell book
   createSpellBook(book) {
-    this.setState({
-      spellBooks: {
-        [book]: new Set(),
-      },
-      spellBookNames: this.state.spellBookNames.concat([book]),
-    });
+    if (!this.state.spellBookNames.includes(book)) {
+      this.setState((prevState) => ({
+        spellBooks: {
+          ...prevState.spellBooks,
+          [book]: new Set([]),
+        },
+        spellBookNames: this.state.spellBookNames.concat([book]),
+      }));
+    }
   }
 
   /* 
@@ -73,19 +77,23 @@ class SpellApp extends React.Component {
   updateSpellBook(spell, book) {
     if (book in this.state.spellBooks) {
       // add to existing spell-book
-      this.setState({
+      console.log("exisiting book", book);
+      this.setState((prevState) => ({
         spellBooks: {
+          ...prevState.spellBooks,
           [book]: this.state.spellBooks[book].add(spell.index),
         },
-      });
+      }));
     } else {
       // new spell-book
-      this.setState({
+      console.warn("new spell book triggered through update");
+      this.setState((prevState) => ({
         spellBooks: {
+          ...prevState.spellBooks,
           [book]: new Set([spell.index]),
         },
         spellBookNames: this.state.spellBookNames.concat([book]),
-      });
+      }));
     }
     let enc = encodeSpellBook(this.state.spellBooks[book]);
     console.log(enc);
@@ -146,6 +154,8 @@ class SpellApp extends React.Component {
             {/* Dynamically create routes for each spell book*/}
             {this.state.spellBookNames.length > 0
               ? this.state.spellBookNames.map((name, index) => {
+                  //console.log(name, index);
+                  //console.log(this.state.spellBooks);
                   return (
                     <Route
                       key={index}
@@ -156,6 +166,7 @@ class SpellApp extends React.Component {
                             .map((index) => this.state.spells[index])
                             .copyWithin()}
                           updateSpellBook={this.updateSpellBook.bind(this)}
+                          spellBookNames={this.state.spellBookNames}
                           {...props}
                         />
                       )}
@@ -171,6 +182,7 @@ class SpellApp extends React.Component {
                 <SpellList
                   spells={this.state.spells}
                   updateSpellBook={this.updateSpellBook.bind(this)}
+                  spellBookNames={this.state.spellBookNames}
                   {...props}
                 />
               )}

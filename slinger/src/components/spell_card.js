@@ -17,6 +17,8 @@ import FlipIcon from "@material-ui/icons/Flip";
 
 import { withStyles } from "@material-ui/core";
 
+import MenuListComposition from "./menu";
+
 const styles = (theme) => ({
   root: {
     height: "100%",
@@ -59,6 +61,7 @@ class SpellCard extends React.PureComponent {
       </div>
     );
   }
+
   render() {
     const { classes } = this.props;
     return (
@@ -116,8 +119,7 @@ class SpellCard extends React.PureComponent {
           {this.state.flip_back
             ? this.displayKeyVal(
                 "Source: ",
-                this.props.spell["source"] + " pg " +
-                this.props.spell["page"]
+                this.props.spell["source"] + " pg " + this.props.spell["page"]
               )
             : null}
           {this.displayKeyVal("Class: (", this.props.spell["class_desc"], ")")}
@@ -133,6 +135,7 @@ class SpellCard extends React.PureComponent {
         </CardContent>
 
         <CardActions>
+
           <IconButton
             onClick={() => {
               this.setState({ flip_back: !this.state.flip_back });
@@ -140,16 +143,13 @@ class SpellCard extends React.PureComponent {
           >
             <FlipIcon />
           </IconButton>
-          <IconButton
-            onClick={() => {
-              this.props.updateSpellBook(this.props.spell, "testBook");
-              this.setState({
-                num: this.state.num + 1,
-              });
+          {/*this.state.to_add ? <AddIcon /> : <RemoveIcon />*/}
+          <MenuListComposition
+            spellBookNames={this.props.spellBookNames}
+            addToSpellBook={(spellBook) => {
+              this.props.updateSpellBook(this.props.spell, spellBook);
             }}
-          >
-            {this.state.to_add ? <AddIcon /> : <RemoveIcon />}
-          </IconButton>
+          />
         </CardActions>
       </Card>
     );

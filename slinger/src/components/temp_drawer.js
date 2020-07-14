@@ -76,12 +76,6 @@ export default function TemporaryDrawer(props) {
               <SearchIcon />
             </ListItemIcon>
             <ListItemText primary={text} />
-            {/*
-            <ListItemIcon>
-              {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-            </ListItemIcon>
-            <ListItemText primary={text} />
-             */}
           </ListItem>
         ))}
       </List>
@@ -92,7 +86,7 @@ export default function TemporaryDrawer(props) {
             button
             key={text}
             onClick={() => {
-              handleRouteClick("/"+text);
+              handleRouteClick("/" + text);
             }}
           >
             <ListItemIcon>
@@ -108,7 +102,7 @@ export default function TemporaryDrawer(props) {
   return (
     <div>
       {
-        //["left", "right", "top", "bottom"].map((anchor) => (
+        //["left", "right", "top", "bottom"]
         ["left"].map((anchor) => (
           <React.Fragment key={anchor}>
             <Button onClick={toggleDrawer(anchor, true)}>spell books</Button>
