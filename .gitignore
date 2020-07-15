@@ -10,3 +10,5 @@ Scripts/
 pyvenv.cfg
 
 assets/
+# Local Netlify folder
+.netlify
