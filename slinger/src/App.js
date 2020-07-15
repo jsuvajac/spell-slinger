@@ -37,6 +37,7 @@ function buf2hex24(buffer) {
 
 // encode a spell book into a unicode string
 function encodeSpellBook(book) {
+  book = Array.from(book);
   let buff = new Uint16Array(book).buffer;
   console.log("buf: ", buff);
   let buf16 = buf2hex24(buff);
@@ -88,12 +89,19 @@ class SpellApp extends React.Component {
     history.push("/");
   };
 
+  // saving the state of spell books to local storage after each update
+  // TODO: Find a way of of calling this after the new state gets updated
+  //       or kludge the new spell in with the previous state
+  // the main issue is that an empty spell book will not be saved and
+  // the last added spell will be missing
   saveToLocalStorage = (book) => {
     console.log("saving: ", book);
-    if (this.state.spellBooks[book]) {
-      let enc = encodeSpellBook([book]);
+    if (this.state.spellBooks[book].size !== 0) {
+      //console.log("state : ", this.state.spellBooks[book]);
+      //console.log("state length: ", this.state.spellBooks[book].length);
+      let enc = encodeSpellBook(this.state.spellBooks[book]);
       localStorage.setItem(book, enc);
-      console.log(book, " saved");
+      //console.log(book, " saved");
     }
   };
 
@@ -125,7 +133,6 @@ class SpellApp extends React.Component {
           [book]: this.state.spellBooks[book].add(spell.index),
         },
       }));
-      this.saveToLocalStorage(book);
     } else {
       // new spell-book
       console.warn("new spell book triggered through update");
@@ -136,6 +143,10 @@ class SpellApp extends React.Component {
         },
         spellBookNames: this.state.spellBookNames.concat([book]),
       }));
+    }
+    if (this.state.spellBooks[book].length !== 0){
+      console.log(this.state.spellBooks[book]);
+      this.saveToLocalStorage(book);
     }
 
     console.info(this.state.spellBooks);
