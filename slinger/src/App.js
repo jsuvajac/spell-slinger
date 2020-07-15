@@ -22,6 +22,7 @@ function buf2hex24(buffer) {
   let hex = Array.prototype.map.call(new Uint16Array(buffer), (x) => {
     return x.toString(16).padStart(4, "0");
   });
+  console.log("hex: ", hex);
   // join into a string
   let str = hex.join("");
   // 0 padding
@@ -37,8 +38,9 @@ function buf2hex24(buffer) {
 // encode a spell book into a unicode string
 function encodeSpellBook(book) {
   let buff = new Uint16Array(book).buffer;
+  console.log("buf: ", buff);
   let buf16 = buf2hex24(buff);
-  //console.log("16: ", buf16);
+  console.log("16: ", buf16);
   let unicode = buf16.map((item) => String.fromCharCode("0x" + item));
   //console.log("to string: ", unicode);
   return unicode.join("");
@@ -48,14 +50,14 @@ function encodeSpellBook(book) {
 function decodeSpellBook(str) {
   // encoded str to char string arr
   let arr = str.split("").map((_, index) => {
-    return str.charCodeAt(index).toString(16).padStart(3,"0");
+    return str.charCodeAt(index).toString(16).padStart(3, "0");
   });
   // remove padding
-  if(arr[arr.length-1].length !== 3){
+  if (arr[arr.length - 1].length !== 3) {
     arr.pop();
   }
   //convert to int
-  arr = arr.map(num => parseInt(num, 16));
+  arr = arr.map((num) => parseInt(num, 16));
   //console.log(arr);
   return arr;
 }
@@ -72,8 +74,11 @@ class SpellApp extends React.Component {
 
     this.state = {
       spells: data, // List of JSON objecst spells
-      spellBooks: { test: new Set([...Array(412).keys()]) }, // set of indices
-      spellBookNames: ["test"], // list of names of spell books
+      spellBooks: {}, // set of indices
+      spellBookNames: [], // list of names of spell books
+
+      //spellBooks: { test: new Set([...Array(412).keys()]) }, // set of indices
+      //spellBookNames: ["test"], // list of names of spell books
     };
   }
 
@@ -81,6 +86,15 @@ class SpellApp extends React.Component {
   goHome = () => {
     const { history } = this.props;
     history.push("/");
+  };
+
+  saveToLocalStorage = (book) => {
+    console.log("saving: ", book);
+    if (this.state.spellBooks[book]) {
+      let enc = encodeSpellBook([book]);
+      localStorage.setItem(book, enc);
+      console.log(book, " saved");
+    }
   };
 
   // TODO: Refactor the spell book api
@@ -111,6 +125,7 @@ class SpellApp extends React.Component {
           [book]: this.state.spellBooks[book].add(spell.index),
         },
       }));
+      this.saveToLocalStorage(book);
     } else {
       // new spell-book
       console.warn("new spell book triggered through update");
@@ -122,10 +137,7 @@ class SpellApp extends React.Component {
         spellBookNames: this.state.spellBookNames.concat([book]),
       }));
     }
-    // let enc = encodeSpellBook(this.state.spellBooks[book]);
-    // console.log(enc);
-    // let dec = decodeSpellBook(enc);
-    // console.log(dec);
+
     console.info(this.state.spellBooks);
   }
 
@@ -147,6 +159,22 @@ class SpellApp extends React.Component {
         return spell;
       }),
     });
+  }
+
+  componentDidMount() {
+    for (let i = 0; i < localStorage.length; i++) {
+      let key = localStorage.key(i);
+      let dec = decodeSpellBook(localStorage.getItem(key));
+      console.log(`${key}: ${localStorage.getItem(key)}`);
+      console.log(`${dec}`);
+        this.setState((prevState) => ({
+          spellBooks: {
+            ...prevState.spellBooks,
+            [key]: new Set(dec),
+          },
+          spellBookNames: this.state.spellBookNames.concat([key]),
+        }));
+    }
   }
 
   render() {
