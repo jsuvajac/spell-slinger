@@ -143,8 +143,8 @@ class SpellCard extends React.PureComponent {
           >
             <FlipIcon />
           </IconButton>
-          {/*this.state.to_add ? <AddIcon /> : <RemoveIcon />*/}
           <MenuListComposition
+            add_icon={true}
             spellBookNames={this.props.spellBookNames}
             addToSpellBook={(spellBook) => {
               this.props.updateSpellBook(this.props.spell, spellBook);

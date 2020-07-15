@@ -12,6 +12,8 @@ import TemporaryDrawer from "./components/temp_drawer";
 //import TabPannel from "./components/tab";
 import FormDialog from "./components/spell_book_form";
 
+import MenuListComposition from "./components/menu";
+
 import "./App.css";
 
 // function returns an array of 4 digit hex strings representing each spell
@@ -119,6 +121,22 @@ class SpellApp extends React.Component {
     }
   }
 
+  // Remove a spell book
+  removeSpellBook(book) {
+    if (book in this.state.spellBookNames) {
+      this.state.spellBooks.filter((item) => {
+        if (item["name"] !== book) {
+          console.log(item["name"], book);
+          return true;
+        }
+        return false;
+      });
+      this.setState({
+        spellBooks: this.state.spellBooks.filter((item) => item["name"] !== book),
+        spellBookNames: this.state.spellBookNames.filter((item) => item !== book),
+      });
+    }
+  }
   /* 
    insert a spell into a spell book
    currently if the book does not exist it will be created
@@ -173,19 +191,18 @@ class SpellApp extends React.Component {
   }
 
   componentDidMount() {
+    let spellBooks = {};
+
     for (let i = 0; i < localStorage.length; i++) {
-      let key = localStorage.key(i);
-      let dec = decodeSpellBook(localStorage.getItem(key));
-      console.log(`${key}: ${localStorage.getItem(key)}`);
-      console.log(`${dec}`);
-        this.setState((prevState) => ({
-          spellBooks: {
-            ...prevState.spellBooks,
-            [key]: new Set(dec),
-          },
-          spellBookNames: this.state.spellBookNames.concat([key]),
-        }));
+      let bookName = localStorage.key(i);
+      let book = decodeSpellBook(localStorage.getItem(bookName));
+      console.log(`${bookName}: ${localStorage.getItem(bookName)}`);
+      spellBooks[bookName] = book;
     }
+    this.setState({
+      spellBooks: spellBooks,
+      spellBookNames: Object.keys(spellBooks),
+    })
   }
 
   render() {
@@ -212,6 +229,10 @@ class SpellApp extends React.Component {
           <SpellForm updateSpell={this.updateSpellList.bind(this)} />
           <TemporaryDrawer spellBooks={this.state.spellBookNames} />
           <FormDialog addSpellBook={this.createSpellBook.bind(this)} />
+          <MenuListComposition 
+            add_icon={false}
+            spellBookNames={this.state.spellBookNames}
+            addToSpellBook={(spellBook) => {this.removeSpellBook.bind(this)}}/>
         </div>
 
         <div className="App-spells">

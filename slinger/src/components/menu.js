@@ -8,7 +8,7 @@ import MenuItem from "@material-ui/core/MenuItem";
 import MenuList from "@material-ui/core/MenuList";
 import { makeStyles } from "@material-ui/core/styles";
 
-//import RemoveIcon from "@material-ui/icons/Remove";
+import RemoveIcon from "@material-ui/icons/Remove";
 import AddIcon from "@material-ui/icons/Add";
 
 const useStyles = makeStyles((theme) => ({
@@ -43,7 +43,7 @@ export default function MenuListComposition(props) {
     if (anchorRef.current && anchorRef.current.contains(event.target)) {
       return;
     }
-    console.log("adding to: ", spellBook);
+    //console.log("adding to: ", spellBook);
     props.addToSpellBook(spellBook);
     setOpen(false);
   };
@@ -74,7 +74,7 @@ export default function MenuListComposition(props) {
           aria-haspopup="true"
           onClick={handleToggle}
         >
-          <AddIcon />
+          {props.add_icon ? <AddIcon /> : <RemoveIcon />}
         </IconButton>
         <Popper
           open={open}
