@@ -8,7 +8,7 @@ import MenuItem from "@material-ui/core/MenuItem";
 import MenuList from "@material-ui/core/MenuList";
 import { makeStyles } from "@material-ui/core/styles";
 
-import RemoveIcon from "@material-ui/icons/Remove";
+//import RemoveIcon from "@material-ui/icons/Remove";
 import AddIcon from "@material-ui/icons/Add";
 
 const useStyles = makeStyles((theme) => ({

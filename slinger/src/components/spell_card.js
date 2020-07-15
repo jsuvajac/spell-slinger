@@ -11,8 +11,8 @@ import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
 
 import IconButton from "@material-ui/core/IconButton";
-import AddIcon from "@material-ui/icons/Add";
-import RemoveIcon from "@material-ui/icons/Remove";
+//import AddIcon from "@material-ui/icons/Add";
+//import RemoveIcon from "@material-ui/icons/Remove";
 import FlipIcon from "@material-ui/icons/Flip";
 
 import { withStyles } from "@material-ui/core";

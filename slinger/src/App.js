@@ -14,24 +14,51 @@ import FormDialog from "./components/spell_book_form";
 
 import "./App.css";
 
-function encodeSpellBook(book) {
-  let buff = new Uint16Array(book);
-  buff.forEach((item) => {
-    console.log(item);
+// function returns an array of 4 digit hex strings representing each spell
+function buf2hex24(buffer) {
+  // buffer is an Uint16Array buffer
+
+  //console.log(new Uint16Array(buffer));
+  let hex = Array.prototype.map.call(new Uint16Array(buffer), (x) => {
+    return x.toString(16).padStart(4, "0");
   });
-  return buff;
+  // join into a string
+  let str = hex.join("");
+  // 0 padding
+  while (str.length % 4 !== 0) {
+    str += "0";
+  }
+  // split in groups of 16
+  hex = str.match(/.{1,4}/g);
+
+  return hex;
 }
 
-/*
-function decodeSpellBook(buff) {
-  console.log(buff);
-  buff.buffer.map((item) => {
-    return item;
-  });
-  console.log(buff);
-  return buff;
+// encode a spell book into a unicode string
+function encodeSpellBook(book) {
+  let buff = new Uint16Array(book).buffer;
+  let buf16 = buf2hex24(buff);
+  //console.log("16: ", buf16);
+  let unicode = buf16.map((item) => String.fromCharCode("0x" + item));
+  //console.log("to string: ", unicode);
+  return unicode.join("");
 }
-*/
+
+// decode the unicode spell containing a spell book
+function decodeSpellBook(str) {
+  // encoded str to char string arr
+  let arr = str.split("").map((_, index) => {
+    return str.charCodeAt(index).toString(16).padStart(3,"0");
+  });
+  // remove padding
+  if(arr[arr.length-1].length !== 3){
+    arr.pop();
+  }
+  //convert to int
+  arr = arr.map(num => parseInt(num, 16));
+  //console.log(arr);
+  return arr;
+}
 
 class SpellApp extends React.Component {
   constructor(props) {
@@ -45,8 +72,8 @@ class SpellApp extends React.Component {
 
     this.state = {
       spells: data, // List of JSON objecst spells
-      spellBooks: {}, // set of indices
-      spellBookNames: [], // list of names of spell books
+      spellBooks: { test: new Set([...Array(412).keys()]) }, // set of indices
+      spellBookNames: ["test"], // list of names of spell books
     };
   }
 
@@ -95,10 +122,10 @@ class SpellApp extends React.Component {
         spellBookNames: this.state.spellBookNames.concat([book]),
       }));
     }
-    let enc = encodeSpellBook(this.state.spellBooks[book]);
-    console.log(enc);
-    //let dec = (decodeSpellBook(enc));
-    //console.log(dec);
+    // let enc = encodeSpellBook(this.state.spellBooks[book]);
+    // console.log(enc);
+    // let dec = decodeSpellBook(enc);
+    // console.log(dec);
     console.info(this.state.spellBooks);
   }
 
@@ -139,7 +166,7 @@ class SpellApp extends React.Component {
         </header>
 
         {
-          // NOTE: alternate option for displaying spell books
+          // TODO: alter the tabs for prepped spells
           //<TabPannel/>
         }
         <div className="App-navigation">
