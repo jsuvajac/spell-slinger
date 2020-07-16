@@ -123,19 +123,16 @@ class SpellApp extends React.Component {
 
   // Remove a spell book
   removeSpellBook(book) {
-    if (book in this.state.spellBookNames) {
-      this.state.spellBooks.filter((item) => {
-        if (item["name"] !== book) {
-          console.log(item["name"], book);
-          return true;
-        }
-        return false;
-      });
-      this.setState({
-        spellBooks: this.state.spellBooks.filter((item) => item["name"] !== book),
-        spellBookNames: this.state.spellBookNames.filter((item) => item !== book),
-      });
-    }
+    console.log("removing: ", book, this.state.spellBooks);
+    const { [book]: value, ...updatedSpellBooks } = this.state.spellBooks;
+    console.log("result: ", updatedSpellBooks);
+
+    this.setState({
+      spellBooks: updatedSpellBooks,
+      spellBookNames: Object.keys(updatedSpellBooks),
+    });
+    // Update local storage
+    
   }
   /* 
    insert a spell into a spell book
@@ -162,7 +159,7 @@ class SpellApp extends React.Component {
         spellBookNames: this.state.spellBookNames.concat([book]),
       }));
     }
-    if (this.state.spellBooks[book].length !== 0){
+    if (this.state.spellBooks[book].length !== 0) {
       console.log(this.state.spellBooks[book]);
       this.saveToLocalStorage(book);
     }
@@ -197,12 +194,13 @@ class SpellApp extends React.Component {
       let bookName = localStorage.key(i);
       let book = decodeSpellBook(localStorage.getItem(bookName));
       console.log(`${bookName}: ${localStorage.getItem(bookName)}`);
+      console.log(`contains: ${book}`);
       spellBooks[bookName] = book;
     }
     this.setState({
       spellBooks: spellBooks,
       spellBookNames: Object.keys(spellBooks),
-    })
+    });
   }
 
   render() {
@@ -229,10 +227,11 @@ class SpellApp extends React.Component {
           <SpellForm updateSpell={this.updateSpellList.bind(this)} />
           <TemporaryDrawer spellBooks={this.state.spellBookNames} />
           <FormDialog addSpellBook={this.createSpellBook.bind(this)} />
-          <MenuListComposition 
+          <MenuListComposition
             add_icon={false}
             spellBookNames={this.state.spellBookNames}
-            addToSpellBook={(spellBook) => {this.removeSpellBook.bind(this)}}/>
+            addToSpellBook={this.removeSpellBook.bind(this)}
+          />
         </div>
 
         <div className="App-spells">
