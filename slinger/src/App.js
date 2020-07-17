@@ -67,9 +67,12 @@ function decodeSpellBook(str) {
 
 // saving the state of spell books to local storage after each update
 const saveToLocalStorage = (bookName, spellBook) => {
-  let enc = encodeSpellBook(spellBook);
-  localStorage.setItem(bookName, enc);
-  // console.log(bookName, " saved");
+  if (spellBook.size === 0) {
+    localStorage.removeItem(bookName);
+  } else {
+    let enc = encodeSpellBook(spellBook);
+    localStorage.setItem(bookName, enc);
+  }
 };
 
 class SpellApp extends React.Component {
@@ -87,6 +90,8 @@ class SpellApp extends React.Component {
       spellBooks: {}, // set of indices
       spellBookNames: [], // list of names of spell books
 
+      // TODO: 
+      // create a permanent non mutable spellBook for storing spell collections
       // spellBooks: { test: new Set([...Array(412).keys()]) }, // set of indices
       // spellBookNames: ["test"], // list of names of spell books
     };
@@ -98,7 +103,6 @@ class SpellApp extends React.Component {
     history.push("/");
   };
 
-  // TODO: Refactor the spell book api
   // Create a new empty spell book
   createSpellBook(book) {
     if (!this.state.spellBookNames.includes(book)) {
@@ -116,31 +120,37 @@ class SpellApp extends React.Component {
   removeSpellBook(book) {
     // console.log("removing: ", book, this.state.spellBooks);
     const { [book]: value, ...updatedSpellBooks } = this.state.spellBooks;
-    // console.log("result: ", updatedSpellBooks);
 
     this.setState({
       spellBooks: updatedSpellBooks,
       spellBookNames: Object.keys(updatedSpellBooks),
     });
-    // Update local storage
+
     localStorage.removeItem(book);
   }
 
   // insert a spell into a spell book
-  updateSpellBook(spell, book) {
+  addSpell(spell, book) {
     const { ...updatedSpellBooks } = this.state.spellBooks;
 
-    // add to existing spell-book
-    // console.log("books", this.state.spellBooks);
-    // console.log("book", this.state.spellBooks[book]);
     updatedSpellBooks[book].add(spell.index);
-    // console.log("updated book", updatedSpellBooks);
 
     this.setState({
       spellBooks: updatedSpellBooks,
     });
 
-    console.log(this.state.spellBooks[book]);
+    saveToLocalStorage(book, updatedSpellBooks[book]);
+  }
+
+  // remove a spell from a spell book
+  removeSpell(spell, book) {
+    const { ...updatedSpellBooks } = this.state.spellBooks;
+
+    updatedSpellBooks[book].delete(spell.index);
+
+    this.setState({
+      spellBooks: updatedSpellBooks,
+    });
     saveToLocalStorage(book, updatedSpellBooks[book]);
 
     console.info(this.state.spellBooks);
@@ -215,11 +225,9 @@ class SpellApp extends React.Component {
         <div className="App-spells">
           <br />
           <Switch>
-            {/* Dynamically create routes for each spell book*/}
+            {/* Dynamically create routes for each spell book */}
             {this.state.spellBookNames.length > 0
               ? this.state.spellBookNames.map((name, index) => {
-                  // console.log(name, index);
-                  // console.log(this.state.spellBooks);
                   return (
                     <Route
                       key={index}
@@ -229,8 +237,10 @@ class SpellApp extends React.Component {
                           spells={Array.from(this.state.spellBooks[name])
                             .map((index) => this.state.spells[index])
                             .copyWithin()}
-                          updateSpellBook={this.updateSpellBook.bind(this)}
+                          updateSpellBook={this.removeSpell.bind(this)}
                           spellBookNames={this.state.spellBookNames}
+                          to_add={false}
+                          spellBook={name}
                           {...props}
                         />
                       )}
@@ -238,15 +248,16 @@ class SpellApp extends React.Component {
                   );
                 })
               : null}
-            {/* Main search route */}
+            {/* Main search route - contains all spells */}
             <Route
               exact
               path="/"
               render={(props) => (
                 <SpellList
                   spells={this.state.spells}
-                  updateSpellBook={this.updateSpellBook.bind(this)}
+                  updateSpellBook={this.addSpell.bind(this)}
                   spellBookNames={this.state.spellBookNames}
+                  to_add={true}
                   {...props}
                 />
               )}

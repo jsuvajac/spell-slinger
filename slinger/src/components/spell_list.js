@@ -52,9 +52,11 @@ class SpellList extends React.PureComponent {
                 xl={1}
               >
                 <SpellCard
+                  to_add={this.props.to_add}
                   spell={spell}
                   updateSpellBook={this.props.updateSpellBook}
                   spellBookNames={this.props.spellBookNames}
+                  spellBook={this.props.spellBook}
                 />
               </Grid>
             ) : null;
