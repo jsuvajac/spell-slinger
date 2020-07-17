@@ -11,8 +11,8 @@ import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
 
 import IconButton from "@material-ui/core/IconButton";
-//import AddIcon from "@material-ui/icons/Add";
-//import RemoveIcon from "@material-ui/icons/Remove";
+// import AddIcon from "@material-ui/icons/Add";
+import RemoveIcon from "@material-ui/icons/Remove";
 import FlipIcon from "@material-ui/icons/Flip";
 
 import { withStyles } from "@material-ui/core";
@@ -135,7 +135,6 @@ class SpellCard extends React.PureComponent {
         </CardContent>
 
         <CardActions>
-
           <IconButton
             onClick={() => {
               this.setState({ flip_back: !this.state.flip_back });
@@ -143,13 +142,34 @@ class SpellCard extends React.PureComponent {
           >
             <FlipIcon />
           </IconButton>
-          <MenuListComposition
-            add_icon={true}
-            spellBookNames={this.props.spellBookNames}
-            addToSpellBook={(spellBook) => {
-              this.props.updateSpellBook(this.props.spell, spellBook);
-            }}
-          />
+          {this.props.to_add ? (
+            <MenuListComposition
+              add_icon={this.props.to_add}
+              spellBookNames={this.props.spellBookNames}
+              addToSpellBook={(spellBook) => {
+                this.props.updateSpellBook(this.props.spell, spellBook);
+              }}
+            />
+          ) : (
+            /* 
+            TODO: add option to add with a button instead
+                  for when there is only one spell book
+                  or
+                  create the menu with right click that picks a spell book (cached)
+                  while left click adds to the chosen book
+            */
+
+            <IconButton
+              onClick={() => {
+                this.props.updateSpellBook(
+                  this.props.spell,
+                  this.props.spellBook
+                );
+              }}
+            >
+              <RemoveIcon />
+            </IconButton>
+          )}
         </CardActions>
       </Card>
     );

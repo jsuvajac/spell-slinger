@@ -34,7 +34,7 @@ export default function MenuListComposition(props) {
       return;
     }
 
-    console.log(props);
+    // console.log(props);
 
     setOpen(false);
   };
@@ -43,7 +43,7 @@ export default function MenuListComposition(props) {
     if (anchorRef.current && anchorRef.current.contains(event.target)) {
       return;
     }
-    //console.log("adding to: ", spellBook);
+    // console.log("adding to: ", spellBook);
     props.addToSpellBook(spellBook);
     setOpen(false);
   };
