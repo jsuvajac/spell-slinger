@@ -1,4 +1,0 @@
-pymongo
-requests
-beautifulsoup4
-matplotlib
