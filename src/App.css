@@ -19,6 +19,7 @@
   font-size: calc(10px + 2vmin);
   color: white;
 }
+
 .App-navigation {
   background-color: white;
   min-height: 5vh;
@@ -29,6 +30,7 @@
   font-size: calc(10px + 2vmin);
   color: #282c34;
 }
+
 .App-link {
   color: #61dafb;
 }

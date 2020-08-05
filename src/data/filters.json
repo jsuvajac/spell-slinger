@@ -1,5 +1,6 @@
 {
     "class": [
+        " ",
         "Wizard",
         "Sorcerer",
         "Warlock",
@@ -11,7 +12,8 @@
         "Ritual Caster"
     ],
     "level": [
-        0,
+        " ",
+        "cantrip",
         1,
         2,
         3,
@@ -22,8 +24,8 @@
         8,
         9
     ],
-    "mod": [
-        "concentration",
-        "ritual"
-    ]
+    "cantrip": 0,
+    "Concentration": "concentration",
+    "Ritual": "ritual",
+    "At higher levels": "higher_level"
 }
