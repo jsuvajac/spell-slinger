@@ -7,22 +7,23 @@ The main view of the app displays all available spells as cards, these can be fi
 ### `Nav bar`
 
 
-#### `Searching`
+#### Searching
     search      -> filter spell cards displayed -- name substring match (not case sensitive)
 
-#### `Category-based filtering`
+#### Category-based filtering
 
     spell books -> open drawer for app navigation
     +           -> create new spell book
     -           -> delete existing spell book
 
-#### `Category filtering`
+#### Category filtering
     
     Class               -> one of [Wizard, Sorcerer, Warlock, Bard, Druid, Ranger, Cleric, Paladin]
     Level               -> one of [cantrip, 1, 2, 3, 4, 5, 6, 7, 8, 9]
     Concentration       -> if spell requires concentration
     Ritual              -> if spell is a ritual
     At higher Levels    -> if spell scales as levels increase
+    Material cost       -> if spell requires materials with a gp cost
 
 ### `Spell Cards`
 Example
@@ -38,7 +39,7 @@ Example
 
     {flip button} {add/remove from spell book button}
 
-#### `Actions`
+#### Actions
     flip        -> inserts the spell's text blurb between the title and the metadata
     add/remove  -> if main view:
                        add the spell to an existing book
@@ -59,7 +60,7 @@ will be represented as:
 
     [0, 1, 2, 4]
 
-#### `Serialization`
+#### Serialization
 A spell book is converted to 3 digit hex array, packed and padded into a unicode string.
 
 The spell books are stored in the localStorage allowing for persistence across wrowser sessions.
