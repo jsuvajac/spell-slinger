@@ -20,6 +20,7 @@ import MenuListComposition from "./components/menu";
 
 import "./App.css";
 
+
 class SpellApp extends React.Component {
   constructor(props) {
     super(props);
@@ -147,7 +148,6 @@ class SpellApp extends React.Component {
 
     // Name filtering
     if (filter_state.name !== "") {
-      console.debug("filter name: ", filter_state.name);
       spells.map((spell) => {
         if (
           spell.name
@@ -226,6 +226,20 @@ class SpellApp extends React.Component {
         return spell;
       });
     }
+    // Material Cost filtering
+    if (filter_state.material_cost) {
+      spells.map((spell) => {
+        if (spell.material_cost === filter_state.material_cost) {
+          if (spell.render) {
+            spell.render = true;
+          }
+        } else {
+          spell.render = false;
+        }
+        return spell;
+      });
+    }
+
 
     // update state if changed
     const after = spells.map((spell) => spell.render);

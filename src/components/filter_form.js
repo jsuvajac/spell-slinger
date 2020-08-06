@@ -28,6 +28,7 @@ export default function FilterForm(props) {
   const [concentration, setConcentration] = React.useState(false);
   const [ritual, setRitual] = React.useState(false);
   const [higher, setHigher] = React.useState(false);
+  const [material_cost, setMaterial_cost] = React.useState(false);
 
   const getState = () => {
     return {
@@ -36,6 +37,7 @@ export default function FilterForm(props) {
       concentration: concentration,
       ritual: ritual,
       higher: higher,
+      material_cost: material_cost,
     };
   };
 
@@ -74,43 +76,52 @@ export default function FilterForm(props) {
     props.updateSpell(null, state);
   };
 
+  const handleChangeMaterialCost = () => {
+    setMaterial_cost(!higher);
+    const state = getState();
+    state.material_cost = !material_cost;
+    props.updateSpell(null, state);
+  };
+
   return (
     <div>
-      <FormControl className={classes.formControl}>
-        <InputLabel id="class-input">Class</InputLabel>
-        <Select
-          labelId="class-input"
-          id="class-select"
-          value={cla}
-          onChange={handleChangeClass}
-        >
-          {FilterData["class"].map((name, index) => {
-            return (
-              <MenuItem value={name} key={index}>
-                {name}
-              </MenuItem>
-            );
-          })}
-        </Select>
-      </FormControl>
+      <div>
+        <FormControl className={classes.formControl}>
+          <InputLabel id="class-input">Class</InputLabel>
+          <Select
+            labelId="class-input"
+            id="class-select"
+            value={cla}
+            onChange={handleChangeClass}
+          >
+            {FilterData["class"].map((name, index) => {
+              return (
+                <MenuItem value={name} key={index}>
+                  {name}
+                </MenuItem>
+              );
+            })}
+          </Select>
+        </FormControl>
 
-      <FormControl className={classes.formControl}>
-        <InputLabel id="level-input">Level</InputLabel>
-        <Select
-          labelId="level-input"
-          id="level-select"
-          value={level}
-          onChange={handleChangeLevel}
-        >
-          {FilterData["level"].map((name, index) => {
-            return (
-              <MenuItem value={name} key={index}>
-                {name}
-              </MenuItem>
-            );
-          })}
-        </Select>
-      </FormControl>
+        <FormControl className={classes.formControl}>
+          <InputLabel id="level-input">Level</InputLabel>
+          <Select
+            labelId="level-input"
+            id="level-select"
+            value={level}
+            onChange={handleChangeLevel}
+          >
+            {FilterData["level"].map((name, index) => {
+              return (
+                <MenuItem value={name} key={index}>
+                  {name}
+                </MenuItem>
+              );
+            })}
+          </Select>
+        </FormControl>
+      </div>
 
       <div>
         <FormControl component="fieldset">
@@ -132,6 +143,12 @@ export default function FilterForm(props) {
               onChange={handleChangeHig}
               control={<Checkbox color="primary" />}
               label="At higher levels"
+            />
+            <FormControlLabel
+              value={material_cost}
+              onChange={handleChangeMaterialCost}
+              control={<Checkbox color="primary" />}
+              label="Material cost"
             />
           </FormGroup>
         </FormControl>
