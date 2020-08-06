@@ -25,7 +25,6 @@ export default function FilterForm(props) {
   const classes = useStyles();
   const [cla, setCla] = React.useState("");
   const [level, setLevel] = React.useState("");
-
   const [concentration, setConcentration] = React.useState(false);
   const [ritual, setRitual] = React.useState(false);
   const [higher, setHigher] = React.useState(false);
@@ -54,21 +53,21 @@ export default function FilterForm(props) {
     props.updateSpell(null, state);
   };
 
-  const handleChangeCon = (event) => {
+  const handleChangeCon = () => {
     setConcentration(!concentration);
     const state = getState();
     state.concentration = !concentration;
     props.updateSpell(null, state);
   };
 
-  const handleChangeRit = (event) => {
+  const handleChangeRit = () => {
     setRitual(!ritual);
     const state = getState();
     state.ritual = !ritual;
     props.updateSpell(null, state);
   };
 
-  const handleChangeHig = (event) => {
+  const handleChangeHig = () => {
     setHigher(!higher);
     const state = getState();
     state.higher = !higher;

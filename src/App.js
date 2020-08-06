@@ -163,10 +163,8 @@ class SpellApp extends React.Component {
     }
     // Class filtering
     if (filter_state.class !== "") {
-      console.debug(filter_state);
-
       spells.map((spell) => {
-        if (spell["class"].includes(filter_state.class)) {
+        if (spell.class.includes(filter_state.class)) {
           if (spell.render) {
             spell.render = true;
           }
@@ -178,10 +176,47 @@ class SpellApp extends React.Component {
     }
     // Level filtering
     if (filter_state.level !== "") {
-      console.debug(filter_state);
-
       spells.map((spell) => {
-        if (spell["level"] === filter_state.level) {
+        if (spell.level === filter_state.level) {
+          if (spell.render) {
+            spell.render = true;
+          }
+        } else {
+          spell.render = false;
+        }
+        return spell;
+      });
+    }
+    // Concentration filtering
+    if (filter_state.concentration) {
+      spells.map((spell) => {
+        if (spell.concentration === filter_state.concentration) {
+          if (spell.render) {
+            spell.render = true;
+          }
+        } else {
+          spell.render = false;
+        }
+        return spell;
+      });
+    }
+    // Ritual filtering
+    if (filter_state.ritual) {
+      spells.map((spell) => {
+        if (spell.ritual === filter_state.ritual) {
+          if (spell.render) {
+            spell.render = true;
+          }
+        } else {
+          spell.render = false;
+        }
+        return spell;
+      });
+    }
+    // Level Scaling filtering
+    if (filter_state.higher) {
+      spells.map((spell) => {
+        if ("higher_level" in spell) {
           if (spell.render) {
             spell.render = true;
           }
