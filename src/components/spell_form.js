@@ -20,6 +20,7 @@ class SpellForm extends React.PureComponent {
             onSubmit={handleSubmit}
             onChange={handleChange}
             className={this.props.root}
+            autoComplete="off"
           >
             {/*
             <IconButton type="submit">

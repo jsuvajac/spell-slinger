@@ -23,9 +23,8 @@ const styles = (theme) => ({
   root: {
     height: "100%",
     width: "100%",
-    color: "purple",
+    color: "primary",
   },
-  card_content: {},
   card_text: {
     color: "textPrimary",
   },
@@ -36,11 +35,8 @@ class SpellCard extends React.PureComponent {
     super(props);
     this.state = {
       flip_back: false,
-      to_add: true,
+      to_add: props.to_add,
     };
-    if (props.to_add) {
-      this.setState({ to_add: props.to_add });
-    }
   }
 
   displayKeyVal(key, val, key2 = null) {

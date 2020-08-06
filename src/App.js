@@ -6,74 +6,20 @@ import Typography from "@material-ui/core/Typography";
 import SpellList from "./components/spell_list";
 import SpellForm from "./components/spell_form";
 import SpellsData from "./data/spells.json";
+// import FilterData from "./data/filters.json";
 
 // Spell Books
 import TemporaryDrawer from "./components/temp_drawer";
+import { saveToLocalStorage, decodeSpellBook } from "./util/spell_book_storage";
+
 //import TabPannel from "./components/tab";
 import FormDialog from "./components/spell_book_form";
+import FilterForm from "./components/filter_form";
 
 import MenuListComposition from "./components/menu";
 
 import "./App.css";
 
-// function returns an array of 4 digit hex strings representing each spell
-function buf2hex24(buffer) {
-  // buffer is an Uint16Array buffer
-
-  //console.log(new Uint16Array(buffer));
-  let hex = Array.prototype.map.call(new Uint16Array(buffer), (x) => {
-    return x.toString(16).padStart(4, "0");
-  });
-  // console.log("hex: ", hex);
-  // join into a string
-  let str = hex.join("");
-  // 0 padding
-  while (str.length % 4 !== 0) {
-    str += "0";
-  }
-  // split in groups of 16
-  hex = str.match(/.{1,4}/g);
-
-  return hex;
-}
-
-// encode a spell book into a unicode string
-function encodeSpellBook(book) {
-  book = Array.from(book);
-  let buff = new Uint16Array(book).buffer;
-  // console.log("buf: ", buff);
-  let buf16 = buf2hex24(buff);
-  // onsole.log("16: ", buf16);
-  let unicode = buf16.map((item) => String.fromCharCode("0x" + item));
-  //console.log("to string: ", unicode);
-  return unicode.join("");
-}
-
-// decode the unicode spell containing a spell book
-function decodeSpellBook(str) {
-  // encoded str to char string arr
-  let arr = str.split("").map((_, index) => {
-    return str.charCodeAt(index).toString(16).padStart(3, "0");
-  });
-  // remove padding
-  if (arr[arr.length - 1].length !== 3) {
-    arr.pop();
-  }
-  // convert to int
-  arr = arr.map((num) => parseInt(num, 16));
-  // console.log(arr);
-  return arr;
-}
-
-// saving the state of spell books to local storage after each update
-const saveToLocalStorage = (bookName, spellBook) => {
-  if (spellBook.size === 0) {
-    localStorage.removeItem(bookName);
-  } else {
-    let enc = encodeSpellBook(spellBook);
-    localStorage.setItem(bookName, enc);
-  }
-};
 
 class SpellApp extends React.Component {
   constructor(props) {
@@ -90,10 +36,17 @@ class SpellApp extends React.Component {
       spellBooks: {}, // set of indices
       spellBookNames: [], // list of names of spell books
 
-      // TODO: 
+      spellFilters: {
+        name: "",
+        class: "",
+        level: "",
+        concentration: false,
+        ritual: false,
+        higher: false,
+      },
+
+      // TODO:
       // create a permanent non mutable spellBook for storing spell collections
-      // spellBooks: { test: new Set([...Array(412).keys()]) }, // set of indices
-      // spellBookNames: ["test"], // list of names of spell books
     };
   }
 
@@ -157,32 +110,160 @@ class SpellApp extends React.Component {
   }
 
   /* 
-   setts spell.render to true if the spell name constins the name as a substring
+   sets spell.render to true if the spell name constins the name as a substring
    the matching is NOT case sensitive
 
    This toggiling solution was much faster than creating a new array of objects
    through map and filter
   */
-  updateSpellList(name) {
-    this.setState({
-      spells: this.state.spells.map((spell) => {
-        if (spell.name.toLowerCase().match(new RegExp(name.toLowerCase()))) {
+  updateSpellList(name, filter = null) {
+    // reset spells
+    let spells = this.state.spells.map((spell) => {
+      spell.render = true;
+      return spell;
+    });
+
+    let filter_state = this.state.spellFilters;
+    // console.log("before state: ", filter_state);
+    const before = spells.map((spell) => spell.render);
+
+    // update name parameter in state
+    if (name !== null) {
+      filter_state.name = name;
+    }
+    // update filter parameters to state
+    if (filter !== null) {
+      let { name } = filter_state;
+
+      filter_state = { ...filter };
+      filter_state.name = name;
+
+      if (filter_state.level === "cantrip") {
+        filter_state.level = 0;
+      }
+    }
+    console.debug("after state: ", filter_state);
+
+    // Filtering:
+
+    // Name filtering
+    if (filter_state.name !== "") {
+      spells.map((spell) => {
+        if (
+          spell.name
+            .toLowerCase()
+            .match(new RegExp(filter_state.name.toLowerCase()))
+        ) {
           spell.render = true;
         } else {
           spell.render = false;
         }
         return spell;
-      }),
-    });
+      });
+    }
+    // Class filtering
+    if (filter_state.class !== "") {
+      spells.map((spell) => {
+        if (spell.class.includes(filter_state.class)) {
+          if (spell.render) {
+            spell.render = true;
+          }
+        } else {
+          spell.render = false;
+        }
+        return spell;
+      });
+    }
+    // Level filtering
+    if (filter_state.level !== "") {
+      spells.map((spell) => {
+        if (spell.level === filter_state.level) {
+          if (spell.render) {
+            spell.render = true;
+          }
+        } else {
+          spell.render = false;
+        }
+        return spell;
+      });
+    }
+    // Concentration filtering
+    if (filter_state.concentration) {
+      spells.map((spell) => {
+        if (spell.concentration === filter_state.concentration) {
+          if (spell.render) {
+            spell.render = true;
+          }
+        } else {
+          spell.render = false;
+        }
+        return spell;
+      });
+    }
+    // Ritual filtering
+    if (filter_state.ritual) {
+      spells.map((spell) => {
+        if (spell.ritual === filter_state.ritual) {
+          if (spell.render) {
+            spell.render = true;
+          }
+        } else {
+          spell.render = false;
+        }
+        return spell;
+      });
+    }
+    // Level Scaling filtering
+    if (filter_state.higher) {
+      spells.map((spell) => {
+        if ("higher_level" in spell) {
+          if (spell.render) {
+            spell.render = true;
+          }
+        } else {
+          spell.render = false;
+        }
+        return spell;
+      });
+    }
+    // Material Cost filtering
+    if (filter_state.material_cost) {
+      spells.map((spell) => {
+        if (spell.material_cost === filter_state.material_cost) {
+          if (spell.render) {
+            spell.render = true;
+          }
+        } else {
+          spell.render = false;
+        }
+        return spell;
+      });
+    }
+
+
+    // update state if changed
+    const after = spells.map((spell) => spell.render);
+    console.debug(
+      "total post filter: ",
+      after.filter((x) => x === true).length
+    );
+
+    if (before !== after) {
+      this.setState({
+        spells: spells,
+        spellFilters: filter_state,
+      });
+    }
   }
 
+  // Read state form local storage
   componentDidMount() {
     let spellBooks = {};
 
     for (let i = 0; i < localStorage.length; i++) {
       let bookName = localStorage.key(i);
       let book = decodeSpellBook(localStorage.getItem(bookName));
-      console.log(`${bookName}: ${book}`);
+      console.debug(`${bookName}: ${book}`);
       spellBooks[bookName] = new Set(book);
     }
     this.setState({
@@ -194,32 +275,38 @@ class SpellApp extends React.Component {
   render() {
     return (
       <div className="App">
-        <header className="App-header">
-          <Typography
-            variant="h4"
-            component="h3"
-            onClick={() => {
-              console.log("reset");
-              this.goHome();
-            }}
-          >
+        <header className="App-header" style={{ display: "flex" }}>
+          <Typography variant="h4" component="h3" onClick={this.goHome}>
             Spell Slinger
+          </Typography>
+          <Typography className="Version" componenet="span">
+            Beta
           </Typography>
         </header>
 
         {
-          // TODO: alter the tabs for prepped spells
+          // TODO: alter the tabs for different loadouts
           // <TabPannel/>
         }
-        <div className="App-navigation">
-          <SpellForm updateSpell={this.updateSpellList.bind(this)} />
-          <TemporaryDrawer spellBooks={this.state.spellBookNames} />
-          <FormDialog addSpellBook={this.createSpellBook.bind(this)} />
-          <MenuListComposition
-            add_icon={false}
-            spellBookNames={this.state.spellBookNames}
-            addToSpellBook={this.removeSpellBook.bind(this)}
-          />
+        <div>
+          <div className="App-navigation">
+            {/* Search bar */}
+            <SpellForm updateSpell={this.updateSpellList.bind(this)} />
+            {/* Spell Book nav */}
+            <TemporaryDrawer spellBooks={this.state.spellBookNames} />
+            {/* Add Spell book */}
+            <FormDialog addSpellBook={this.createSpellBook.bind(this)} />
+            {/* Remove Spell book */}
+            <MenuListComposition
+              add_icon={false}
+              spellBookNames={this.state.spellBookNames}
+              addToSpellBook={this.removeSpellBook.bind(this)}
+            />
+          </div>
+          {/* TODO: add a drawer button to expand  */}
+          <div className="App-navigation">
+            <FilterForm updateSpell={this.updateSpellList.bind(this)} />
+          </div>
         </div>
 
         <div className="App-spells">

@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core";
-import { MuiThemeProvider } from "@material-ui/core/styles";
+import { ThemeProvider } from "@material-ui/core/styles";
 import { createMuiTheme } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
 
@@ -31,7 +31,7 @@ class SpellList extends React.PureComponent {
   render() {
     const { classes } = this.props;
     return (
-      <MuiThemeProvider theme={theme}>
+      <ThemeProvider theme={theme}>
         <Grid
           container
           className={classes.root}
@@ -62,7 +62,7 @@ class SpellList extends React.PureComponent {
             ) : null;
           })}
         </Grid>
-      </MuiThemeProvider>
+      </ThemeProvider>
     );
   }
 }
