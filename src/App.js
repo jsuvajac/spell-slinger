@@ -20,7 +20,6 @@ import MenuListComposition from "./components/menu";
 
 import "./App.css";
 
-
 class SpellApp extends React.Component {
   constructor(props) {
     super(props);
@@ -36,7 +35,16 @@ class SpellApp extends React.Component {
       spellBooks: {}, // set of indices
       spellBookNames: [], // list of names of spell books
 
-      // TODO: 
+      spellFilters: {
+        name: "",
+        class: "",
+        level: "",
+        concentration: false,
+        ritual: false,
+        higher: false,
+      },
+
+      // TODO:
       // create a permanent non mutable spellBook for storing spell collections
     };
   }
@@ -107,17 +115,96 @@ class SpellApp extends React.Component {
    This toggiling solution was much faster than creating a new array of objects
    through map and filter
   */
-  updateSpellList(name) {
-    this.setState({
-      spells: this.state.spells.map((spell) => {
-        if (spell.name.toLowerCase().match(new RegExp(name.toLowerCase()))) {
+  updateSpellList(name, filter = null) {
+    // reset spells
+    let spells = this.state.spells.map((spell) => {
+      spell.render = true;
+      return spell;
+    });
+
+    let filter_state = this.state.spellFilters;
+    // console.log("before state: ", filter_state);
+    const before = spells.map((spell) => spell.render);
+
+    // update name parameter in state
+    if (name !== null) {
+      filter_state.name = name;
+    }
+    // update filter parameters to state
+    if (filter !== null) {
+      let { name } = filter_state;
+
+      filter_state = { ...filter };
+      filter_state.name = name;
+
+      if (filter_state.level === "cantrip") {
+        filter_state.level = 0;
+      }
+    }
+    console.debug("after state: ", filter_state);
+
+    // Filtering:
+
+    // Name filtering
+    if (filter_state.name !== "") {
+      console.debug("filter name: ", filter_state.name);
+      spells.map((spell) => {
+        if (
+          spell.name
+            .toLowerCase()
+            .match(new RegExp(filter_state.name.toLowerCase()))
+        ) {
           spell.render = true;
         } else {
           spell.render = false;
         }
         return spell;
-      }),
-    });
+      });
+    }
+    // Class filtering
+    if (filter_state.class !== "") {
+      console.debug(filter_state);
+
+      spells.map((spell) => {
+        if (spell["class"].includes(filter_state.class)) {
+          if (spell.render) {
+            spell.render = true;
+          }
+        } else {
+          spell.render = false;
+        }
+        return spell;
+      });
+    }
+    // Level filtering
+    if (filter_state.level !== "") {
+      console.debug(filter_state);
+
+      spells.map((spell) => {
+        if (spell["level"] === filter_state.level) {
+          if (spell.render) {
+            spell.render = true;
+          }
+        } else {
+          spell.render = false;
+        }
+        return spell;
+      });
+    }
+
+    // update state if changed
+    const after = spells.map((spell) => spell.render);
+    console.debug(
+      "total post filter: ",
+      after.filter((x) => x === true).length
+    );
+
+    if (before !== after) {
+      this.setState({
+        spells: spells,
+        spellFilters: filter_state,
+      });
+    }
   }
 
   // Read state form local storage
@@ -127,7 +214,7 @@ class SpellApp extends React.Component {
     for (let i = 0; i < localStorage.length; i++) {
       let bookName = localStorage.key(i);
       let book = decodeSpellBook(localStorage.getItem(bookName));
-      console.log(`${bookName}: ${book}`);
+      console.debug(`${bookName}: ${book}`);
       spellBooks[bookName] = new Set(book);
     }
     this.setState({
@@ -139,35 +226,33 @@ class SpellApp extends React.Component {
   render() {
     return (
       <div className="App">
-        <header className="App-header">
-          <Typography
-            variant="h4"
-            component="h3"
-            onClick={ this.goHome }
-          >
+        <header className="App-header" style={{ display: "flex" }}>
+          <Typography variant="h4" component="h3" onClick={this.goHome}>
             Spell Slinger
+          </Typography>
+          <Typography className="Version" componenet="span">
+            Beta
           </Typography>
         </header>
 
         {
-          // TODO: alter the tabs for prepped spells
+          // TODO: alter the tabs for different loadouts
           // <TabPannel/>
         }
         <div>
           <div className="App-navigation">
-
-          {/* Search bar */}
-          <SpellForm updateSpell={this.updateSpellList.bind(this)} />
-          {/* Spell Book nav */}
-          <TemporaryDrawer spellBooks={this.state.spellBookNames} />
-          {/* Add Spell book */}
-          <FormDialog addSpellBook={this.createSpellBook.bind(this)} />
-          {/* Remove Spell book */}
-          <MenuListComposition
-            add_icon={false}
-            spellBookNames={this.state.spellBookNames}
-            addToSpellBook={this.removeSpellBook.bind(this)}
-          />
+            {/* Search bar */}
+            <SpellForm updateSpell={this.updateSpellList.bind(this)} />
+            {/* Spell Book nav */}
+            <TemporaryDrawer spellBooks={this.state.spellBookNames} />
+            {/* Add Spell book */}
+            <FormDialog addSpellBook={this.createSpellBook.bind(this)} />
+            {/* Remove Spell book */}
+            <MenuListComposition
+              add_icon={false}
+              spellBookNames={this.state.spellBookNames}
+              addToSpellBook={this.removeSpellBook.bind(this)}
+            />
           </div>
           {/* TODO: add a drawer button to expand  */}
           <div className="App-navigation">

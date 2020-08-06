@@ -23,7 +23,7 @@ const styles = (theme) => ({
   root: {
     height: "100%",
     width: "100%",
-    color: "purple",
+    color: "primary",
   },
   card_text: {
     color: "textPrimary",
