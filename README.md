@@ -6,10 +6,23 @@ The main view of the app displays all available spells as cards, these can be fi
 
 ### `Nav bar`
 
-    search      -> filter spell cards displayed
+
+#### `Searching`
+    search      -> filter spell cards displayed -- name substring match (not case sensitive)
+
+#### `Category-based filtering`
+
     spell books -> open drawer for app navigation
     +           -> create new spell book
     -           -> delete existing spell book
+
+#### `Category filtering`
+    
+    Class               -> one of [Wizard, Sorcerer, Warlock, Bard, Druid, Ranger, Cleric, Paladin]
+    Level               -> one of [cantrip, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+    Concentration       -> if spell requires concentration
+    Ritual              -> if spell is a ritual
+    At higher Levels    -> if spell scales as levels increase
 
 ### `Spell Cards`
 Example
