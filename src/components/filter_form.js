@@ -77,7 +77,7 @@ export default function FilterForm(props) {
   };
 
   const handleChangeMaterialCost = () => {
-    setMaterial_cost(!higher);
+    setMaterial_cost(!material_cost);
     const state = getState();
     state.material_cost = !material_cost;
     props.updateSpell(null, state);
