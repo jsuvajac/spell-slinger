@@ -4,26 +4,21 @@ This is the front end of a d&d 5e spell tracking tool. Demo running at: [spellsl
 
 The main view of the app displays all available spells as cards, these can be filtered dynamically through the search field. Only the spells that contain the search field as as a substring of their name are displayed. The main view is intended for spell reference and spell book population.
 
-### `Nav bar`
-
-
+### `Control bar`
 #### Searching
     search      -> filter spell cards displayed -- name substring match (not case sensitive)
-
-#### Category-based filtering
-
+#### Spell Book control
     spell books -> open drawer for app navigation
     +           -> create new spell book
     -           -> delete existing spell book
-
 #### Category filtering
-    
-    Class               -> one of [Wizard, Sorcerer, Warlock, Bard, Druid, Ranger, Cleric, Paladin]
-    Level               -> one of [cantrip, 1, 2, 3, 4, 5, 6, 7, 8, 9]
-    Concentration       -> if spell requires concentration
-    Ritual              -> if spell is a ritual
-    At higher Levels    -> if spell scales as levels increase
-    Material cost       -> if spell requires materials with a gp cost
+    Class                   -> one of [Wizard, Sorcerer, Warlock, Bard, Druid, Ranger, Cleric, Paladin]
+    Level                   -> one of [cantrip, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+#### Bool filtering
+    Concentration           -> if spell requires concentration
+    Ritual                  -> if spell is a ritual
+    Scales at higher Levels -> if spell scales as levels increase
+    Material cost           -> if spell requires materials with a gp cost
 
 ### `Spell Cards`
 Example
@@ -37,14 +32,14 @@ Example
     Class: (Sorcerer, Wizard)
     Casting time: 1 action
 
-    {flip button} {add/remove from spell book button}
+    {add/remove from spell book button}        ...         {flip button} 
 
 #### Actions
-    flip        -> inserts the spell's text blurb between the title and the metadata
     add/remove  -> if main view:
                        add the spell to an existing book
                    if spell book view:
                        remove the spell form the spell book
+    flip        -> inserts the spell's text blurb between the title and the metadata
 
 
 Internally the spells are just a list of objects that does not change and is loaded in when the app loads.
@@ -63,4 +58,4 @@ will be represented as:
 #### Serialization
 A spell book is converted to 3 digit hex array, packed and padded into a unicode string.
 
-The spell books are stored in the localStorage allowing for persistence across wrowser sessions.
+The spell books are stored in the localStorage allowing for persistence across browser sessions.

@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 
 import Typography from "@material-ui/core/Typography";
-
+import clsx from 'clsx';
 import Card from "@material-ui/core/Card";
 //import CardHeader from '@material-ui/core/CardHeader';
 
@@ -13,7 +13,8 @@ import CardContent from "@material-ui/core/CardContent";
 import IconButton from "@material-ui/core/IconButton";
 // import AddIcon from "@material-ui/icons/Add";
 import RemoveIcon from "@material-ui/icons/Remove";
-import FlipIcon from "@material-ui/icons/Flip";
+// import FlipIcon from "@material-ui/icons/Flip";
+import FlipIcon from '@material-ui/icons/KeyboardArrowDown';
 
 import { withStyles } from "@material-ui/core";
 
@@ -27,6 +28,16 @@ const styles = (theme) => ({
   },
   card_text: {
     color: "textPrimary",
+  },
+  expand: {
+    transform: 'rotate(0deg)',
+    marginLeft: 'auto',
+    transition: theme.transitions.create('transform', {
+      duration: theme.transitions.duration.shortest,
+    }),
+  },
+  expandOpen: {
+    transform: 'rotate(180deg)',
   },
 });
 
@@ -68,7 +79,7 @@ class SpellCard extends React.PureComponent {
           </Typography>
 
           {/*
-          // back
+          // back -- text and level scaling
           */}
           {this.state.flip_back ? (
             this.props.spell["higher_level"] ? (
@@ -106,12 +117,16 @@ class SpellCard extends React.PureComponent {
           )}
           {this.props.spell["material_cost"]
             ? this.displayKeyVal(
+                "Material cost: ",
+                this.props.spell["material_desc"]
+              )
+            : this.props.spell["material"] 
+            ? this.displayKeyVal(
                 "Materials: ",
                 this.props.spell["material_desc"]
               )
             : null}
           {this.displayKeyVal("Duration: ", this.props.spell["duration"])}
-
           {this.state.flip_back
             ? this.displayKeyVal(
                 "Source: ",
@@ -123,21 +138,24 @@ class SpellCard extends React.PureComponent {
             "Casting time: ",
             this.props.spell["casting_time"]
           )}
+          {/*
+          // Bool spell filters
+          // TODO: replace with icons
+          */}
 
           {this.props.spell["ritual"] ? this.displayKeyVal("Ritual", "") : null}
           {this.props.spell["concentration"]
             ? this.displayKeyVal("Concentration", "")
             : null}
+          {this.props.spell["higher_level"]
+            ? this.displayKeyVal("Scales at higher levels", "")
+            : null}
         </CardContent>
 
-        <CardActions>
-          <IconButton
-            onClick={() => {
-              this.setState({ flip_back: !this.state.flip_back });
-            }}
-          >
-            <FlipIcon />
-          </IconButton>
+        <CardActions disableSpacing>
+          {/*
+          // Add/remove form spell book
+          */}
           {this.props.to_add ? (
             <MenuListComposition
               add_icon={this.props.to_add}
@@ -155,7 +173,7 @@ class SpellCard extends React.PureComponent {
                   while left click adds to the chosen book
             */
 
-            <IconButton
+            <IconButton aria-label="remove from spell book"
               onClick={() => {
                 this.props.updateSpellBook(
                   this.props.spell,
@@ -166,6 +184,23 @@ class SpellCard extends React.PureComponent {
               <RemoveIcon />
             </IconButton>
           )}
+
+          {/*
+          // Toggle text blurb
+          */}
+          <IconButton
+            className={clsx(classes.expand, {
+              [classes.expandOpen]: this.state.flip_back,
+            })}
+            aria-label="show spell text"
+            onClick={() => {
+              this.setState({ flip_back: !this.state.flip_back });
+            }}
+          >
+            <FlipIcon />
+          </IconButton>
+
+
         </CardActions>
       </Card>
     );

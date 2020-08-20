@@ -142,7 +142,7 @@ export default function FilterForm(props) {
               value={higher}
               onChange={handleChangeHig}
               control={<Checkbox color="primary" />}
-              label="At higher levels"
+              label="Scales at higher levels"
             />
             <FormControlLabel
               value={material_cost}
