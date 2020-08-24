@@ -13,7 +13,6 @@ import TemporaryDrawer from "./components/temp_drawer";
 import { saveToLocalStorage, decodeSpellBook } from "./util/spell_book_storage";
 
 //import TabPannel from "./components/tab";
-import Paper from "@material-ui/core/Paper";
 import FormDialog from "./components/spell_book_form";
 import FilterForm from "./components/filter_form";
 
@@ -280,6 +279,7 @@ class SpellApp extends React.Component {
           >
             Spell Slinger
           </Typography>
+
           <Typography className="Version" componenet="span">
             Beta
           </Typography>
@@ -290,18 +290,15 @@ class SpellApp extends React.Component {
           // <TabPannel/>
         }
 
-        <Paper className="App-search">
-          <div className="App-navigation">
-            {/* Search bar */}
-            <SpellForm updateSpell={this.updateSpellList.bind(this)} />
-          </div>
-          <div className="App-navigation">
-            {/* TODO: add a drawer button to expand  */}
-            <FilterForm updateSpell={this.updateSpellList.bind(this)} />
-          </div>
-        </Paper>
-        <br />
-        <Paper className="App-navigation" style={{"max-width": "50%"}}>
+        <div className="App-navigation">
+          {/* Search bar */}
+          <SpellForm updateSpell={this.updateSpellList.bind(this)} />
+        </div>
+        <div className="App-navigation">
+          {/* TODO: add a drawer button to expand  */}
+          <FilterForm updateSpell={this.updateSpellList.bind(this)} />
+        </div>
+        <div className="App-navigation">
           {/* Spell Book nav */}
           <TemporaryDrawer spellBooks={this.state.spellBookNames} />
           {/* Add Spell book */}
@@ -312,7 +309,7 @@ class SpellApp extends React.Component {
             spellBookNames={this.state.spellBookNames}
             addToSpellBook={this.removeSpellBook.bind(this)}
           />
-        </Paper>
+        </div>
         <div className="App-spells">
           <br />
           <Switch>
