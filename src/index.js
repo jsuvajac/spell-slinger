@@ -12,6 +12,10 @@ const mainTheme = createMuiTheme({
   palette: {
     type: "dark",
   },
+  breakpoints: {
+    keys: ["xs", "sm", "md", "lg", "xl"],
+    values: { xs: 0, sm: 568, md: 1080, lg: 1400, xl: 1920 },
+  },
 });
 
 ReactDOM.render(
