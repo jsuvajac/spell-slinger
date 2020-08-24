@@ -1,7 +1,6 @@
 import React from "react";
 import { Formik } from "formik";
 import TextField from "@material-ui/core/TextField";
-//import IconButton from "@material-ui/core/Button";
 import SearchIcon from "@material-ui/icons/Search";
 import { InputAdornment } from "@material-ui/core";
 
@@ -22,12 +21,6 @@ class SpellForm extends React.PureComponent {
             className={this.props.root}
             autoComplete="off"
           >
-            {/*
-            <IconButton type="submit">
-              <SearchIcon />
-            </IconButton>
-            */}
-
             <TextField
               name="spell"
               onChange={(data) => {

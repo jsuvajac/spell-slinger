@@ -4,27 +4,27 @@ import { BrowserRouter as Router } from "react-router-dom";
 import "./index.css";
 import App from "./App";
 import * as serviceWorker from "./serviceWorker";
+// Default theme
+import { ThemeProvider, createMuiTheme } from "@material-ui/core/styles";
+import CssBaseline from "@material-ui/core/CssBaseline";
+
+const mainTheme = createMuiTheme({
+  palette: {
+    type: "dark",
+  },
+});
 
 ReactDOM.render(
-    /*
-    NOTE: strict mode was removed for conveanience as the material ui
-          displays a warning when using drawer and tabs
-
-          https://github.com/mui-org/material-ui/issues/13394
-
-      <React.StrictMode>
-      <App />
-      </React.StrictMode>
-  */
   <React.Fragment>
     <Router>
-      <App />
+      <ThemeProvider theme={mainTheme}>
+        <CssBaseline />
+        <App />
+      </ThemeProvider>
     </Router>
   </React.Fragment>,
   document.getElementById("root")
 );
 
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
 // Learn more about service workers: https://bit.ly/CRA-PWA
 serviceWorker.unregister();

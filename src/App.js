@@ -20,7 +20,6 @@ import MenuListComposition from "./components/menu";
 
 import "./App.css";
 
-
 class SpellApp extends React.Component {
   constructor(props) {
     super(props);
@@ -44,9 +43,6 @@ class SpellApp extends React.Component {
         ritual: false,
         higher: false,
       },
-
-      // TODO:
-      // create a permanent non mutable spellBook for storing spell collections
     };
   }
 
@@ -240,7 +236,6 @@ class SpellApp extends React.Component {
       });
     }
 
-
     // update state if changed
     const after = spells.map((spell) => spell.render);
     console.debug(
@@ -276,7 +271,12 @@ class SpellApp extends React.Component {
     return (
       <div className="App">
         <header className="App-header" style={{ display: "flex" }}>
-          <Typography variant="h4" component="h3" onClick={this.goHome}>
+          <Typography
+            variant="h4"
+            component="h3"
+            onClick={this.goHome}
+            style={{ margin: 5 }} // space to "Version" text
+          >
             Spell Slinger
           </Typography>
           <Typography className="Version" componenet="span">
