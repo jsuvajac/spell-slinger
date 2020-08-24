@@ -288,10 +288,16 @@ class SpellApp extends React.Component {
           // TODO: alter the tabs for different loadouts
           // <TabPannel/>
         }
-        <div>
+        <div >
           <div className="App-navigation">
             {/* Search bar */}
             <SpellForm updateSpell={this.updateSpellList.bind(this)} />
+          </div>
+          <div className="App-navigation">
+          {/* TODO: add a drawer button to expand  */}
+            <FilterForm updateSpell={this.updateSpellList.bind(this)} />
+          </div>
+          <div className="App-navigation">
             {/* Spell Book nav */}
             <TemporaryDrawer spellBooks={this.state.spellBookNames} />
             {/* Add Spell book */}
@@ -302,10 +308,6 @@ class SpellApp extends React.Component {
               spellBookNames={this.state.spellBookNames}
               addToSpellBook={this.removeSpellBook.bind(this)}
             />
-          </div>
-          {/* TODO: add a drawer button to expand  */}
-          <div className="App-navigation">
-            <FilterForm updateSpell={this.updateSpellList.bind(this)} />
           </div>
         </div>
 

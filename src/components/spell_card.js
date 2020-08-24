@@ -126,17 +126,17 @@ class SpellCard extends React.PureComponent {
               )
             : null}
           {this.displayKeyVal("Duration: ", this.props.spell["duration"])}
+          {this.displayKeyVal("Class: (", this.props.spell["class_desc"], ")")}
+          {this.displayKeyVal(
+            "Casting time: ",
+            this.props.spell["casting_time"]
+          )}
           {this.state.flip_back
             ? this.displayKeyVal(
                 "Source: ",
                 this.props.spell["source"] + " pg " + this.props.spell["page"]
               )
             : null}
-          {this.displayKeyVal("Class: (", this.props.spell["class_desc"], ")")}
-          {this.displayKeyVal(
-            "Casting time: ",
-            this.props.spell["casting_time"]
-          )}
           {/*
           // Bool spell filters
           // TODO: replace with icons
