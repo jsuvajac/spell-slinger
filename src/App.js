@@ -13,6 +13,7 @@ import TemporaryDrawer from "./components/temp_drawer";
 import { saveToLocalStorage, decodeSpellBook } from "./util/spell_book_storage";
 
 //import TabPannel from "./components/tab";
+import Paper from "@material-ui/core/Paper";
 import FormDialog from "./components/spell_book_form";
 import FilterForm from "./components/filter_form";
 
@@ -288,7 +289,8 @@ class SpellApp extends React.Component {
           // TODO: alter the tabs for different loadouts
           // <TabPannel/>
         }
-        <div>
+
+        <Paper className="App-search">
           <div className="App-navigation">
             {/* Search bar */}
             <SpellForm updateSpell={this.updateSpellList.bind(this)} />
@@ -297,20 +299,20 @@ class SpellApp extends React.Component {
             {/* TODO: add a drawer button to expand  */}
             <FilterForm updateSpell={this.updateSpellList.bind(this)} />
           </div>
-          <div className="App-navigation">
-            {/* Spell Book nav */}
-            <TemporaryDrawer spellBooks={this.state.spellBookNames} />
-            {/* Add Spell book */}
-            <FormDialog addSpellBook={this.createSpellBook.bind(this)} />
-            {/* Remove Spell book */}
-            <MenuListComposition
-              add_icon={false}
-              spellBookNames={this.state.spellBookNames}
-              addToSpellBook={this.removeSpellBook.bind(this)}
-            />
-          </div>
-        </div>
-
+        </Paper>
+        <br />
+        <Paper className="App-navigation" style={{"max-width": "50%"}}>
+          {/* Spell Book nav */}
+          <TemporaryDrawer spellBooks={this.state.spellBookNames} />
+          {/* Add Spell book */}
+          <FormDialog addSpellBook={this.createSpellBook.bind(this)} />
+          {/* Remove Spell book */}
+          <MenuListComposition
+            add_icon={false}
+            spellBookNames={this.state.spellBookNames}
+            addToSpellBook={this.removeSpellBook.bind(this)}
+          />
+        </Paper>
         <div className="App-spells">
           <br />
           <Switch>
