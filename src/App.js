@@ -288,13 +288,13 @@ class SpellApp extends React.Component {
           // TODO: alter the tabs for different loadouts
           // <TabPannel/>
         }
-        <div >
+        <div>
           <div className="App-navigation">
             {/* Search bar */}
             <SpellForm updateSpell={this.updateSpellList.bind(this)} />
           </div>
           <div className="App-navigation">
-          {/* TODO: add a drawer button to expand  */}
+            {/* TODO: add a drawer button to expand  */}
             <FilterForm updateSpell={this.updateSpellList.bind(this)} />
           </div>
           <div className="App-navigation">
