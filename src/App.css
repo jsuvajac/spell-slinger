@@ -1,38 +1,27 @@
 .App-spells {
-  background-color: #282c34;
   min-height: 100vh;
   display: flex;
   flex-direction: horizontal;
   align-items: center;
   justify-content: center;
   font-size: calc(10px + 2vmin);
-  color: white;
 }
 
 .App-header {
-  background-color: #282c34;
-  min-height: 10vh;
+  min-height: 12vh;
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: center;
   font-size: calc(10px + 2vmin);
-  color: white;
 }
 
 .App-navigation {
-  background-color: white;
   min-height: 5vh;
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: #282c34;
-}
-
-.App-link {
-  color: #61dafb;
 }
 
 .Version {
@@ -40,8 +29,6 @@
 	background-size: 400% 400%;
   animation: gradient 15s ease infinite;
   border-radius: 5px;
-  margin: 10px;
-  border: 10px;
 }
 
 @keyframes gradient {

@@ -20,7 +20,6 @@ import MenuListComposition from "./components/menu";
 
 import "./App.css";
 
-
 class SpellApp extends React.Component {
   constructor(props) {
     super(props);
@@ -44,9 +43,6 @@ class SpellApp extends React.Component {
         ritual: false,
         higher: false,
       },
-
-      // TODO:
-      // create a permanent non mutable spellBook for storing spell collections
     };
   }
 
@@ -240,7 +236,6 @@ class SpellApp extends React.Component {
       });
     }
 
-
     // update state if changed
     const after = spells.map((spell) => spell.render);
     console.debug(
@@ -276,9 +271,15 @@ class SpellApp extends React.Component {
     return (
       <div className="App">
         <header className="App-header" style={{ display: "flex" }}>
-          <Typography variant="h4" component="h3" onClick={this.goHome}>
+          <Typography
+            variant="h4"
+            component="h3"
+            onClick={this.goHome}
+            style={{ margin: 5 }} // space to "Version" text
+          >
             Spell Slinger
           </Typography>
+
           <Typography className="Version" componenet="span">
             Beta
           </Typography>
@@ -288,27 +289,27 @@ class SpellApp extends React.Component {
           // TODO: alter the tabs for different loadouts
           // <TabPannel/>
         }
-        <div>
-          <div className="App-navigation">
-            {/* Search bar */}
-            <SpellForm updateSpell={this.updateSpellList.bind(this)} />
-            {/* Spell Book nav */}
-            <TemporaryDrawer spellBooks={this.state.spellBookNames} />
-            {/* Add Spell book */}
-            <FormDialog addSpellBook={this.createSpellBook.bind(this)} />
-            {/* Remove Spell book */}
-            <MenuListComposition
-              add_icon={false}
-              spellBookNames={this.state.spellBookNames}
-              addToSpellBook={this.removeSpellBook.bind(this)}
-            />
-          </div>
-          {/* TODO: add a drawer button to expand  */}
-          <div className="App-navigation">
-            <FilterForm updateSpell={this.updateSpellList.bind(this)} />
-          </div>
-        </div>
 
+        <div className="App-navigation">
+          {/* Search bar */}
+          <SpellForm updateSpell={this.updateSpellList.bind(this)} />
+        </div>
+        <div className="App-navigation">
+          {/* TODO: add a drawer button to expand  */}
+          <FilterForm updateSpell={this.updateSpellList.bind(this)} />
+        </div>
+        <div className="App-navigation">
+          {/* Spell Book nav */}
+          <TemporaryDrawer spellBooks={this.state.spellBookNames} />
+          {/* Add Spell book */}
+          <FormDialog addSpellBook={this.createSpellBook.bind(this)} />
+          {/* Remove Spell book */}
+          <MenuListComposition
+            add_icon={false}
+            spellBookNames={this.state.spellBookNames}
+            addToSpellBook={this.removeSpellBook.bind(this)}
+          />
+        </div>
         <div className="App-spells">
           <br />
           <Switch>

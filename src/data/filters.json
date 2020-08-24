@@ -1,6 +1,6 @@
 {
     "class": [
-        "",
+        "-",
         "Wizard",
         "Sorcerer",
         "Warlock",
@@ -11,8 +11,8 @@
         "Paladin"
     ],
     "level": [
-        "",
-        "cantrip",
+        "-",
+        "Cantrip",
         1,
         2,
         3,

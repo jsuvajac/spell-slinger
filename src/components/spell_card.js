@@ -2,19 +2,15 @@ import React from "react";
 import PropTypes from "prop-types";
 
 import Typography from "@material-ui/core/Typography";
-import clsx from 'clsx';
+import clsx from "clsx";
 import Card from "@material-ui/core/Card";
-//import CardHeader from '@material-ui/core/CardHeader';
 
 import CardActions from "@material-ui/core/CardActions";
-//import CardActionArea from '@material-ui/core/CardActionArea';
 import CardContent from "@material-ui/core/CardContent";
 
 import IconButton from "@material-ui/core/IconButton";
-// import AddIcon from "@material-ui/icons/Add";
 import RemoveIcon from "@material-ui/icons/Remove";
-// import FlipIcon from "@material-ui/icons/Flip";
-import FlipIcon from '@material-ui/icons/KeyboardArrowDown';
+import FlipIcon from "@material-ui/icons/KeyboardArrowDown";
 
 import { withStyles } from "@material-ui/core";
 
@@ -24,20 +20,18 @@ const styles = (theme) => ({
   root: {
     height: "100%",
     width: "100%",
-    color: "primary",
-  },
-  card_text: {
-    color: "textPrimary",
+    // color: theme.palette.primary.dark,
+    // backgroundColor: theme.palette.primary.light,
   },
   expand: {
-    transform: 'rotate(0deg)',
-    marginLeft: 'auto',
-    transition: theme.transitions.create('transform', {
+    transform: "rotate(0deg)",
+    marginLeft: "auto",
+    transition: theme.transitions.create("transform", {
       duration: theme.transitions.duration.shortest,
     }),
   },
   expandOpen: {
-    transform: 'rotate(180deg)',
+    transform: "rotate(180deg)",
   },
 });
 
@@ -120,24 +114,24 @@ class SpellCard extends React.PureComponent {
                 "Material cost: ",
                 this.props.spell["material_desc"]
               )
-            : this.props.spell["material"] 
+            : this.props.spell["material"]
             ? this.displayKeyVal(
                 "Materials: ",
                 this.props.spell["material_desc"]
               )
             : null}
           {this.displayKeyVal("Duration: ", this.props.spell["duration"])}
+          {this.displayKeyVal("Class: (", this.props.spell["class_desc"], ")")}
+          {this.displayKeyVal(
+            "Casting time: ",
+            this.props.spell["casting_time"]
+          )}
           {this.state.flip_back
             ? this.displayKeyVal(
                 "Source: ",
                 this.props.spell["source"] + " pg " + this.props.spell["page"]
               )
             : null}
-          {this.displayKeyVal("Class: (", this.props.spell["class_desc"], ")")}
-          {this.displayKeyVal(
-            "Casting time: ",
-            this.props.spell["casting_time"]
-          )}
           {/*
           // Bool spell filters
           // TODO: replace with icons
@@ -173,7 +167,8 @@ class SpellCard extends React.PureComponent {
                   while left click adds to the chosen book
             */
 
-            <IconButton aria-label="remove from spell book"
+            <IconButton
+              aria-label="remove from spell book"
               onClick={() => {
                 this.props.updateSpellBook(
                   this.props.spell,
@@ -199,8 +194,6 @@ class SpellCard extends React.PureComponent {
           >
             <FlipIcon />
           </IconButton>
-
-
         </CardActions>
       </Card>
     );

@@ -13,11 +13,19 @@ import FilterData from "../data/filters.json";
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
+    align_items: "center",
+    justify_content: "center",
     margin: theme.spacing(1),
-    minWidth: 120,
+    minWidth: 75,
+    maxWidht: 300,
   },
   selectEmpty: {
     marginTop: theme.spacing(2),
+  },
+  dropdown: {
+    align_items: "center",
+    justify_content: "center",
+    flex_direction: "vertical",
   },
 }));
 
@@ -84,9 +92,10 @@ export default function FilterForm(props) {
   };
 
   return (
-    <div>
-      <div>
-        <FormControl className={classes.formControl}>
+    <React.Fragment>
+
+      <div className={classes.dropdown}>
+        <FormControl  className={classes.formControl} component="fieldset">
           <InputLabel id="class-input">Class</InputLabel>
           <Select
             labelId="class-input"
@@ -95,7 +104,11 @@ export default function FilterForm(props) {
             onChange={handleChangeClass}
           >
             {FilterData["class"].map((name, index) => {
-              return (
+              return name === "-" ? (
+                <MenuItem value={""} key={index}>
+                  {name}
+                </MenuItem>
+              ) : (
                 <MenuItem value={name} key={index}>
                   {name}
                 </MenuItem>
@@ -104,7 +117,7 @@ export default function FilterForm(props) {
           </Select>
         </FormControl>
 
-        <FormControl className={classes.formControl}>
+        <FormControl className={classes.formControl} component="fieldset">
           <InputLabel id="level-input">Level</InputLabel>
           <Select
             labelId="level-input"
@@ -113,7 +126,11 @@ export default function FilterForm(props) {
             onChange={handleChangeLevel}
           >
             {FilterData["level"].map((name, index) => {
-              return (
+              return name === "-" ? (
+                <MenuItem value={""} key={index}>
+                  {name}
+                </MenuItem>
+              ) : (
                 <MenuItem value={name} key={index}>
                   {name}
                 </MenuItem>
@@ -123,8 +140,8 @@ export default function FilterForm(props) {
         </FormControl>
       </div>
 
-      <div>
-        <FormControl component="fieldset">
+      <div className={classes.dropdown}>
+        <FormControl className={classes.formControl} component="fieldset">
           <FormGroup aria-label="position" row>
             <FormControlLabel
               value={concentration}
@@ -142,7 +159,7 @@ export default function FilterForm(props) {
               value={higher}
               onChange={handleChangeHig}
               control={<Checkbox color="primary" />}
-              label="Scales at higher levels"
+              label="Scales"
             />
             <FormControlLabel
               value={material_cost}
@@ -153,6 +170,6 @@ export default function FilterForm(props) {
           </FormGroup>
         </FormControl>
       </div>
-    </div>
+    </React.Fragment>
   );
 }
