@@ -17,6 +17,7 @@ import FormDialog from "./components/spell_book_form";
 import FilterForm from "./components/filter_form";
 
 import MenuListComposition from "./components/menu";
+import BackendTest from "./components/backend_test";
 
 import "./App.css";
 
@@ -319,7 +320,7 @@ class SpellApp extends React.Component {
                   return (
                     <Route
                       key={index}
-                      path={`/${name}`}
+                      path={`/spellbook/${name}`}
                       render={(props) => (
                         <SpellList
                           spells={Array.from(this.state.spellBooks[name])
@@ -348,6 +349,13 @@ class SpellApp extends React.Component {
                   to_add={true}
                   {...props}
                 />
+              )}
+            />
+            <Route
+              exact
+              path="/test"
+              render={(props) => (
+                <BackendTest/>
               )}
             />
           </Switch>
