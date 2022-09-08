@@ -279,10 +279,6 @@ class SpellApp extends React.Component {
           >
             Spell Slinger
           </Typography>
-
-          <Typography className="Version" componenet="span">
-            Beta
-          </Typography>
         </header>
 
         {
