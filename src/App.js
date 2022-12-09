@@ -13,10 +13,8 @@ import TemporaryDrawer from "./components/temp_drawer";
 import { saveToLocalStorage, decodeSpellBook } from "./util/spell_book_storage";
 
 //import TabPannel from "./components/tab";
-import FormDialog from "./components/spell_book_form";
 import FilterForm from "./components/filter_form";
 
-import MenuListComposition from "./components/menu";
 
 import "./App.css";
 
@@ -270,12 +268,20 @@ class SpellApp extends React.Component {
   render() {
     return (
       <div className="App">
-        <header className="App-header" style={{ display: "flex" }}>
+        <TemporaryDrawer
+          spellBooks={this.state.spellBookNames}
+          addSpellBook={this.createSpellBook.bind(this)}
+          removeFromSpellBook={this.removeSpellBook.bind(this)}
+          spellBookNames={this.state.spellBookNames}
+        />
+
+
+        <header style={{ margin: 3, display: "flex" }}>
           <Typography
             variant="h4"
             component="h3"
             onClick={this.goHome}
-            style={{ margin: 5 }} // space to "Version" text
+            style={{ margin: "auto" }}
           >
             Spell Slinger
           </Typography>
@@ -294,43 +300,31 @@ class SpellApp extends React.Component {
           {/* TODO: add a drawer button to expand  */}
           <FilterForm updateSpell={this.updateSpellList.bind(this)} />
         </div>
-        <div className="App-navigation">
-          {/* Spell Book nav */}
-          <TemporaryDrawer spellBooks={this.state.spellBookNames} />
-          {/* Add Spell book */}
-          <FormDialog addSpellBook={this.createSpellBook.bind(this)} />
-          {/* Remove Spell book */}
-          <MenuListComposition
-            add_icon={false}
-            spellBookNames={this.state.spellBookNames}
-            addToSpellBook={this.removeSpellBook.bind(this)}
-          />
-        </div>
         <div className="App-spells">
           <br />
           <Switch>
             {/* Dynamically create routes for each spell book */}
             {this.state.spellBookNames.length > 0
               ? this.state.spellBookNames.map((name, index) => {
-                  return (
-                    <Route
-                      key={index}
-                      path={`/${name}`}
-                      render={(props) => (
-                        <SpellList
-                          spells={Array.from(this.state.spellBooks[name])
-                            .map((index) => this.state.spells[index])
-                            .copyWithin()}
-                          updateSpellBook={this.removeSpell.bind(this)}
-                          spellBookNames={this.state.spellBookNames}
-                          to_add={false}
-                          spellBook={name}
-                          {...props}
-                        />
-                      )}
-                    />
-                  );
-                })
+                return (
+                  <Route
+                    key={index}
+                    path={`/${name}`}
+                    render={(props) => (
+                      <SpellList
+                        spells={Array.from(this.state.spellBooks[name])
+                          .map((index) => this.state.spells[index])
+                          .copyWithin()}
+                        updateSpellBook={this.removeSpell.bind(this)}
+                        spellBookNames={this.state.spellBookNames}
+                        to_add={false}
+                        spellBook={name}
+                        {...props}
+                      />
+                    )}
+                  />
+                );
+              })
               : null}
             {/* Main search route - contains all spells */}
             <Route

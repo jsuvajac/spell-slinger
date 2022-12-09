@@ -4,21 +4,20 @@ import { useHistory } from "react-router-dom";
 import clsx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
 import Drawer from "@material-ui/core/Drawer";
-import Button from "@material-ui/core/Button";
 import List from "@material-ui/core/List";
 import Divider from "@material-ui/core/Divider";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
+import Typography from "@material-ui/core/Typography";
+import IconButton from '@material-ui/core/IconButton';
 
-//import InboxIcon from "@material-ui/icons/MoveToInbox";
-//import MailIcon from "@material-ui/icons/Mail";
-import SearchIcon from "@material-ui/icons/Search";
-
-// Candidates for spell books
+import MenuIcon from "@material-ui/icons/Menu";
 import MenuBookIcon from "@material-ui/icons/MenuBook";
-//import LibraryBooksIcon from '@material-ui/icons/LibraryBooks';
-//import ImportContactsIcon from "@material-ui/icons/ImportContacts";
+
+import FormDialog from "./spell_book_form";
+import MenuListComposition from "./menu";
+
 
 const useStyles = makeStyles({
   list: {
@@ -44,6 +43,7 @@ export default function TemporaryDrawer(props) {
     history.push(route);
   };
   const toggleDrawer = (anchor, open) => (event) => {
+    // event.preventDefault();
     if (
       event.type === "keydown" &&
       (event.key === "Tab" || event.key === "Shift")
@@ -60,25 +60,21 @@ export default function TemporaryDrawer(props) {
         [classes.fullList]: anchor === "top" || anchor === "bottom",
       })}
       role="presentation"
-      onClick={toggleDrawer(anchor, false)}
-      onKeyDown={toggleDrawer(anchor, false)}
     >
-      <List>
-        {["search"].map((text, index) => (
-          <ListItem
-            button
-            key={text}
-            onClick={() => {
-              handleRouteClick("/");
-            }}
-          >
-            <ListItemIcon>
-              <SearchIcon />
-            </ListItemIcon>
-            <ListItemText primary={text} />
-          </ListItem>
-        ))}
-      </List>
+      <div className="App-navigation">
+        {/* Spell Book nav */}
+        <Typography
+          variant="h5"
+          component="h5"
+          style={{ margin: 5 }} // space to "Version" text
+        >
+          Spell Books
+        </Typography>
+
+        {/* Add Spell book */}
+        <FormDialog addSpellBook={props.addSpellBook} />
+
+      </div>
       <Divider />
       <List>
         {props.spellBooks.map((text, index) => (
@@ -94,18 +90,35 @@ export default function TemporaryDrawer(props) {
             </ListItemIcon>
             <ListItemText primary={text} />
           </ListItem>
+
         ))}
+
       </List>
+
+      {/* Remove Spell book */}
+      <MenuListComposition
+        add_icon={false}
+        spellBookNames={props.spellBookNames}
+        addToSpellBook={props.removeFromSpellBook}
+      />
+
     </div>
   );
 
   return (
-    <div>
+    <div style={{ position: "absolute" }}>
       {
-        //["left", "right", "top", "bottom"]
         ["left"].map((anchor) => (
           <React.Fragment key={anchor}>
-            <Button onClick={toggleDrawer(anchor, true)}>spell books</Button>
+            <IconButton
+              color="inherit"
+              aria-label="open drawer"
+              edge="start"
+              onClick={toggleDrawer(anchor, true)}
+              style={{ marginLeft: 3 }}
+            >
+              <MenuIcon />
+            </IconButton>
             <Drawer
               anchor={anchor}
               open={state[anchor]}
