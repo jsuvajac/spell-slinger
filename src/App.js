@@ -276,12 +276,12 @@ class SpellApp extends React.Component {
         />
 
 
-        <header style={{ margin: 3, display: "flex" }}>
+        <header className="App-header" style={{ display: "flex" }}>
           <Typography
             variant="h4"
             component="h3"
             onClick={this.goHome}
-            style={{ margin: "auto" }}
+            style={{ margin: 5 }}
           >
             Spell Slinger
           </Typography>
